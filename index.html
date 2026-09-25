@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>27SS展示会 FC全店サマリーダッシュボード</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+  :root{
+    --ink:#1a1a2e; --sub:#5a6473; --line:#e3e7ed; --bg:#EFECE6;
+    --card:#ffffff; --accent:#1f3a5f; --accent2:#2D5A8E;
+    --good:#1f8a5b; --warn:#c8922a; --bad:#c0492f; --barbg:#eef1f5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',"Hiragino Kaku Gothic ProN",system-ui,sans-serif;color:var(--ink);background:var(--bg);
+    line-height:1.6;font-size:13px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px}
+  .wrap.wide{max-width:1000px}
+  header.rpt{border-bottom:3px solid var(--accent);padding-bottom:18px;margin-bottom:8px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--accent2);font-weight:700}
+  h1{font-size:26px;margin:4px 0 2px;letter-spacing:.01em;font-weight:500;text-wrap:balance}
+  .meta{font-size:12.5px;color:var(--sub)}
+  .badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;
+    padding:2px 9px;border-radius:11px;font-weight:700;margin-left:6px;vertical-align:2px}
+  section{margin-top:30px}
+  h2{font-size:16px;border-left:5px solid var(--accent);padding-left:10px;margin-bottom:14px;font-weight:700}
+  .note{font-size:11.5px;color:var(--sub);margin-top:-6px;margin-bottom:12px}
+  .note a,.links a{color:var(--accent2);font-weight:700;text-decoration:none}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px}
+  .kpi .lbl{font-size:11.5px;color:var(--sub);font-weight:600}
+  .kpi .val{font-size:22px;font-weight:700;margin-top:3px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+  .kpi .val.txt{font-size:16px;line-height:1.35;margin-top:6px}
+  .kpi .unit{font-size:12px;font-weight:600;color:var(--sub);margin-left:2px}
+  .kpi .cmp{font-size:11px;margin-top:3px}
+  .up{color:var(--good)} .down{color:var(--bad)} .mid{color:var(--warn)}
+  .tw{overflow-x:auto;border-radius:10px}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  td.l,th.l{text-align:left}
+  thead th{background:var(--accent);color:#fff;font-weight:700;font-size:12px;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr.total{background:#eef2f7;font-weight:700}
+  tbody tr.hl td{background:#fbf6ea}
+  .pos{color:var(--good);font-weight:700}.neg{color:var(--bad);font-weight:700}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .panel h3{font-size:13.5px;margin-bottom:10px;color:var(--accent)}
+  .mini{font-size:12.5px}
+  .tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:10px;font-weight:700;white-space:nowrap}
+  .tag.g{background:#e3f3ea;color:var(--good)} .tag.w{background:#fdf2dd;color:var(--warn)}
+  .tag.b{background:#fae6e0;color:var(--bad)} .tag.n{background:#eef2f7;color:var(--accent)}
+  .insight{background:#fff;border:1px solid var(--line);border-left:5px solid var(--accent);
+    border-radius:8px;padding:14px 16px;font-size:13px;margin-top:14px}
+  .insight strong{color:var(--accent)}
+  .pn{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--sub)}
+  .mk{display:inline-block;font-size:9.5px;font-weight:700;padding:0 6px;border-radius:9px;margin-left:4px;vertical-align:1px}
+  .mk.ss{background:#eef2f7;color:var(--accent)} .mk.thick{background:#e3f3ea;color:var(--good)}
+  .mk.later{background:#fdf2dd;color:var(--warn)} .mk.cross{background:#fae6e0;color:var(--bad)}
+  .donut-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .donut-card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .donut-card.avg{border:2px solid var(--accent)}
+  .donut-ttl{font-size:13px;font-weight:700}
+  .svg-wrap{position:relative;width:200px;height:200px;max-width:100%}
+  .center-info{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;pointer-events:none;width:100px}
+  .ci-rate{font-size:24px;font-weight:500;line-height:1}
+  .ci-lbl{font-size:10px;color:#8a8f99;margin-top:2px}
+  .ci-vals{font-size:10px;color:#6b7280;margin-top:5px;line-height:1.7}
+  .leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;width:100%;margin-top:4px}
+  .leg-item{display:flex;align-items:flex-start;gap:4px;font-size:10px;color:#555;line-height:1.4}
+  .leg-item small{font-size:9px;color:#8a8f99}
+  .leg-sq{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-top:3px}
+  .donut-legendbar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+  .ltag{color:#fff;padding:3px 10px;border-radius:3px;font-size:.72rem;font-weight:500}
+  .bmetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 12px}
+  .bm{background:#f5f2ec;border-radius:6px;padding:7px 9px}
+  .bm .bm-l{font-size:10px;color:var(--sub);font-weight:600}
+  .bm .bm-cmp{display:flex;justify-content:space-between;align-items:baseline;margin-top:3px}
+  .bm .bm-store{font-size:15px;font-weight:800;color:var(--ink)}
+  .bm .bm-avg{font-size:10.5px;color:#8a8f99}
+  .bh{font-size:14px;color:var(--accent);margin:8px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px;display:flex;align-items:center;gap:8px}
+  .bh .sw{width:10px;height:10px;border-radius:2px}
+  .brand{margin-bottom:18px}
+  .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .scatter-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
+  .scatter-wrap svg{width:100%;height:auto;display:block}
+  .quad-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--sub);margin-top:8px}
+  .quad-legend span{display:flex;align-items:center;gap:4px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  table.rank td,table.rank th{padding:8px 8px;font-size:12px}
+  table.rank a{color:var(--accent2);text-decoration:none;font-weight:700}
+  table.rank a:hover{text-decoration:underline}
+  .sortable{cursor:pointer;user-select:none}
+  .sortable:hover{background:var(--accent2)}
+  .grptag{font-size:9.5px;padding:1px 6px;border-radius:8px;color:#fff;font-weight:700}
+  .backlink{display:inline-block;margin-bottom:16px;font-size:12px;color:var(--accent2);text-decoration:none;font-weight:700}
+  .storenav{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  .storenav a{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#eef2f7;color:var(--accent);font-weight:600;text-decoration:none}
+  .storenav a.cur{background:var(--accent);color:#fff}
+  .quad2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;border-top:5px solid var(--accent)}
+  .qcard.good{border-top-color:var(--good)} .qcard.warn{border-top-color:var(--warn)}
+  .qcard.bad{border-top-color:var(--bad)} .qcard.mid{border-top-color:var(--accent2)}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+  .qtitle{font-size:15px;font-weight:700}
+  .qcount{font-size:11px;color:var(--sub);white-space:nowrap}
+  .qavg{font-size:11px;color:var(--sub);background:#f5f2ec;border-radius:5px;padding:5px 9px;margin:8px 0 12px}
+  .stores{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .schip{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#eef2f7;color:var(--accent);font-weight:600;text-decoration:none}
+  .mdl{font-size:12px;margin-top:8px}
+  .mdl b.h{display:inline-block;font-size:11px;padding:1px 8px;border-radius:9px;margin-bottom:3px}
+  .mdl .m b.h{background:#e3f3ea;color:var(--good)}
+  .mdl .d b.h{background:#fae6e0;color:var(--bad)}
+  .mdl .k b.h{background:#fdf2dd;color:var(--warn)}
+  .mdl ul{margin:2px 0 10px 0;padding-left:16px}
+  .mdl li{margin:3px 0;font-size:12px}
+  footer{margin-top:40px;font-size:11px;color:var(--sub);border-top:1px solid var(--line);padding-top:14px}
+  a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+  @media(max-width:760px){.cards,.dash-grid,.bmetrics{grid-template-columns:repeat(2,1fr)}.twocol,.donut-row,.quad2{grid-template-columns:1fr}}
+  @media print{body{background:#fff}.wrap{max-width:none}}
+</style></head><body>
+<div class="wrap">
+<header class="rpt">
+  <div class="eyebrow">27SS展示会｜26SS実績ベース（Q1期＝3〜5月）</div>
+  <h1>FC全店 サマリーダッシュボード</h1>
+  <div class="meta">全15店舗のQ1期消化率・最終消化率・在庫倍率・全社追随率を横断比較／各店名クリックで個店レポートへ　※単位:千円</div>
+</header>
+
+<section>
+  <h2>全社KPI（26SS実績）</h2>
+  <div class="dash-grid">
+    <div class="kpi"><div class="lbl">FC合計 発注額</div><div class="val">243,318<span class="unit">千円</span></div><div class="cmp" style="color:var(--sub)">15店計</div></div>
+    <div class="kpi"><div class="lbl">FC Q1期消化率（3〜5月）</div><div class="val">50.4<span class="unit">%</span></div><div class="cmp" style="color:var(--sub)">Q1売上 約122,732千円</div></div>
+    <div class="kpi"><div class="lbl">FC 最終消化率（3〜8月）</div><div class="val">63.8<span class="unit">%</span></div><div class="cmp" style="color:var(--sub)">後伸び +13.4pt</div></div>
+    <div class="kpi"><div class="lbl">FC平均 在庫倍率／追随率</div><div class="val">1.69<span class="unit">／48.2%</span></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>課題グループマップ（全社追随率 × Q1期消化率）</h2>
+  <p class="note">テーマは「Q1期（3〜5月）の売上をどう上げるか」。横軸＝全社追随率（全社の売れ筋をどれだけ取れているか）／縦軸＝Q1期消化率。基準線はFC平均（追随48.2%／消化50.4%）。4群は優劣ではなく、どの要素を伸ばすかの違い。点をクリックで個店レポートへ。<br><a href="quadrant_analysis.html">→ 課題グループ4象限の詳細</a>　<a href="torso_review.html">→ 26SSトルソー計画 振り返り</a></p>
+  <div class="scatter-wrap"><svg viewBox="0 0 720 460" role="img" aria-label="全社追随率 × Q1期消化率 散布図"><rect x="381.2" y="20.0" width="318.8" height="192.4" fill="#1f8a5b" opacity="0.05"/><rect x="381.2" y="212.4" width="318.8" height="197.6" fill="#c8922a" opacity="0.05"/><rect x="56.0" y="20.0" width="325.2" height="192.4" fill="#2D5A8E" opacity="0.05"/><rect x="56.0" y="212.4" width="325.2" height="197.6" fill="#c0492f" opacity="0.05"/><line x1="88.2" x2="88.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="88.2" y="430" text-anchor="middle" font-size="10" fill="#888">30%</text><line x1="168.7" x2="168.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="168.7" y="430" text-anchor="middle" font-size="10" fill="#888">35%</text><line x1="249.2" x2="249.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="249.2" y="430" text-anchor="middle" font-size="10" fill="#888">40%</text><line x1="329.7" x2="329.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="329.7" y="430" text-anchor="middle" font-size="10" fill="#888">45%</text><line x1="410.2" x2="410.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="410.2" y="430" text-anchor="middle" font-size="10" fill="#888">50%</text><line x1="490.7" x2="490.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="490.7" y="430" text-anchor="middle" font-size="10" fill="#888">55%</text><line x1="571.2" x2="571.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="571.2" y="430" text-anchor="middle" font-size="10" fill="#888">60%</text><line x1="651.7" x2="651.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="651.7" y="430" text-anchor="middle" font-size="10" fill="#888">65%</text><line x1="56" x2="700" y1="410.0" y2="410.0" stroke="#f0f0f0"/><text x="48" y="413.0" text-anchor="end" font-size="10" fill="#888">20%</text><line x1="56" x2="700" y1="345.0" y2="345.0" stroke="#f0f0f0"/><text x="48" y="348.0" text-anchor="end" font-size="10" fill="#888">30%</text><line x1="56" x2="700" y1="280.0" y2="280.0" stroke="#f0f0f0"/><text x="48" y="283.0" text-anchor="end" font-size="10" fill="#888">40%</text><line x1="56" x2="700" y1="215.0" y2="215.0" stroke="#f0f0f0"/><text x="48" y="218.0" text-anchor="end" font-size="10" fill="#888">50%</text><line x1="56" x2="700" y1="150.0" y2="150.0" stroke="#f0f0f0"/><text x="48" y="153.0" text-anchor="end" font-size="10" fill="#888">60%</text><line x1="56" x2="700" y1="85.0" y2="85.0" stroke="#f0f0f0"/><text x="48" y="88.0" text-anchor="end" font-size="10" fill="#888">70%</text><line x1="56" x2="700" y1="20.0" y2="20.0" stroke="#f0f0f0"/><text x="48" y="23.0" text-anchor="end" font-size="10" fill="#888">80%</text><line x1="381.2" x2="381.2" y1="20" y2="410" stroke="#c8b8a0" stroke-dasharray="4 3"/><line x1="56" x2="700" y1="212.4" y2="212.4" stroke="#c8b8a0" stroke-dasharray="4 3"/><text x="692" y="36.0" text-anchor="end" font-size="12" font-weight="700" fill="#1f8a5b">A 数量を積む</text><text x="692" y="402.0" text-anchor="end" font-size="12" font-weight="700" fill="#c8922a">B 打ち出し・VMD</text><text x="64" y="36.0" text-anchor="start" font-size="12" font-weight="700" fill="#2D5A8E">C 客数</text><text x="64" y="402.0" text-anchor="start" font-size="12" font-weight="700" fill="#c0492f">D 品ぞろえの適合</text><text x="378.0" y="452" text-anchor="middle" font-size="11" fill="#666">全社追随率 →（全社の売れ筋を取れている）</text><text transform="translate(14,215.0) rotate(-90)" text-anchor="middle" font-size="11" fill="#666">Q1期消化率 ↑（3〜5月）</text><a href="store_mito.html"><circle cx="463.3" cy="277.4" r="15.0" fill="#c8922a" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="481.3" y="280.4" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">水戸京成</text></a><a href="store_chiba.html"><circle cx="571.2" cy="152.6" r="12.8" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="587.0" y="155.6" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">そごう千葉</text></a><a href="store_utsunomiya.html"><circle cx="266.9" cy="233.2" r="12.7" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="282.6" y="236.2" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">東武宇都宮</text></a><a href="store_asahikawa.html"><circle cx="463.3" cy="52.5" r="12.1" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="478.4" y="55.5" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">旭川フィール</text></a><a href="store_fukuyama.html"><circle cx="392.5" cy="176.7" r="12.0" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="407.5" y="179.7" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">福山TML</text></a><a href="store_toyama.html"><circle cx="605.0" cy="112.9" r="11.7" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="619.7" y="115.9" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">富山TML</text></a><a href="store_koriyama.html"><circle cx="302.3" cy="260.5" r="11.7" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="317.0" y="263.5" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">郡山うすい</text></a><a href="store_wakayama.html"><circle cx="130.1" cy="253.3" r="11.7" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="144.7" y="256.4" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">和歌山近鉄</text></a><a href="store_kawagoe.html"><circle cx="463.3" cy="178.6" r="11.6" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="478.0" y="181.6" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">川越丸広</text></a><a href="store_miyazaki.html"><circle cx="310.4" cy="369.7" r="11.3" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="324.7" y="372.7" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">宮崎山形屋</text></a><a href="store_morioka.html"><circle cx="410.2" cy="274.8" r="11.0" fill="#c8922a" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="410.2" y="296.8" text-anchor="middle" font-size="9.5" font-weight="400" fill="#444">盛岡川徳</text></a><a href="store_tottori.html"><circle cx="249.2" cy="228.0" r="10.5" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="249.2" y="249.5" text-anchor="middle" font-size="9.5" font-weight="400" fill="#444">鳥取丸由</text></a><a href="store_kagoshima_gv.html"><circle cx="463.3" cy="192.2" r="10.5" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="476.8" y="195.2" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">鹿児島GV</text></a><a href="store_nagano.html"><circle cx="329.7" cy="211.8" r="10.4" fill="#2D5A8E" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="343.1" y="214.8" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">ながの東急</text></a><a href="store_takasaki_tml.html"><circle cx="299.1" cy="155.8" r="10.1" fill="#2D5A8E" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="312.2" y="158.8" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">高崎髙島屋TML</text></a></svg><div class="quad-legend"><span><span class="dot" style="background:#1f8a5b"></span>A 数量を積むを伸ばす（追随高 × 消化高）</span><span><span class="dot" style="background:#c8922a"></span>B 打ち出し・VMDを伸ばす（追随高 × 消化低）</span><span><span class="dot" style="background:#2D5A8E"></span>C 客数を伸ばす（追随低 × 消化高）</span><span><span class="dot" style="background:#c0492f"></span>D 品ぞろえの適合を伸ばす（追随低 × 消化低）</span><span>点の大きさ＝発注額／破線＝FC平均</span></div></div>
+</section>
+
+<section>
+  <h2>全店ランキング一覧</h2>
+  <p class="note">ヘッダをクリックで並べ替え。店舗名クリックで個店レポートを開きます。後伸び＝最終消化率−Q1期消化率。</p>
+  <div class="tw"><table class="rank" id="rank-tbl"></table></div>
+</section>
+
+<section>
+  <h2>課題グループ別 店舗</h2>
+  <div class="panel"><ul class="mini" style="list-style:none;padding:0"><li style="margin:8px 0"><span class="grptag" style="background:#1f8a5b">A</span> <b>数量を積むを伸ばす</b>（追随高 × 消化高）：旭川フィール・富山TML・そごう千葉・福山TML・川越丸広・鹿児島GV　<span style="color:var(--sub)">全社の売れ筋を旬で売り切れている</span></li><li style="margin:8px 0"><span class="grptag" style="background:#c8922a">B</span> <b>打ち出し・VMDを伸ばす</b>（追随高 × 消化低）：盛岡川徳・水戸京成　<span style="color:var(--sub)">売れ筋は入っているが売り期の流れとズレやすい</span></li><li style="margin:8px 0"><span class="grptag" style="background:#2D5A8E">C</span> <b>客数を伸ばす</b>（追随低 × 消化高）：高崎髙島屋TML・ながの東急　<span style="color:var(--sub)">独自の品で売り切れている</span></li><li style="margin:8px 0"><span class="grptag" style="background:#c0492f">D</span> <b>品ぞろえの適合を伸ばす</b>（追随低 × 消化低）：鳥取丸由・東武宇都宮・和歌山近鉄・郡山うすい・宮崎山形屋　<span style="color:var(--sub)">独自路線で、売り期の流れともズレやすい</span></li></ul></div>
+</section>
+
+<section>
+  <h2>発注方針サマリ</h2>
+  <div class="panel"><ul class="mini" style="list-style:none;padding:0"><li style="margin:8px 0"><span class="tag b">発注過多・抑制</span> <a href="store_miyazaki.html" style="color:var(--ink);text-decoration:none">宮崎山形屋</a>（Q1 26.2%・在庫4.49）・<a href="store_mito.html" style="color:var(--ink);text-decoration:none">水戸京成</a>（Q1 40.4%・在庫3.13）・<a href="store_koriyama.html" style="color:var(--ink);text-decoration:none">郡山うすい</a>（Q1 43.0%・在庫2.44）＝発注を抑える。在庫が詰まっており『もっと売れ』は効かない。売れ筋に絞る。</li><li style="margin:8px 0"><span class="tag w">やや過多</span> <a href="store_morioka.html" style="color:var(--ink);text-decoration:none">盛岡川徳</a>（Q1 40.8%・在庫1.9）・<a href="store_wakayama.html" style="color:var(--ink);text-decoration:none">和歌山近鉄</a>（Q1 44.1%・在庫1.74）・<a href="store_nagano.html" style="color:var(--ink);text-decoration:none">ながの東急</a>（Q1 50.5%・在庫1.76）＝やや在庫過多。即売れ品に寄せ、動きの鈍い品番を絞る。</li><li style="margin:8px 0"><span class="tag w">後伸び型・タイミング見直し</span> <a href="store_tottori.html" style="color:var(--ink);text-decoration:none">鳥取丸由</a>（Q1 48.0%・在庫1.94）＝Q1の数字だけで抑えない。投入を前倒しし、後で効く品を切らずに持つ。</li><li style="margin:8px 0"><span class="tag n">健闘/標準</span> <a href="store_utsunomiya.html" style="color:var(--ink);text-decoration:none">東武宇都宮</a>（Q1 47.2%・在庫1.42）・<a href="store_kagoshima_gv.html" style="color:var(--ink);text-decoration:none">鹿児島GV</a>（Q1 53.5%・在庫1.27）・<a href="store_kawagoe.html" style="color:var(--ink);text-decoration:none">川越丸広</a>（Q1 55.6%・在庫1.47）・<a href="store_fukuyama.html" style="color:var(--ink);text-decoration:none">福山TML</a>（Q1 55.9%・在庫0.79）・<a href="store_takasaki_tml.html" style="color:var(--ink);text-decoration:none">高崎髙島屋TML</a>（Q1 59.1%・在庫1.17）・<a href="store_chiba.html" style="color:var(--ink);text-decoration:none">そごう千葉</a>（Q1 59.6%・在庫1.43）＝標準ゾーン。即売れ品を厚く、後で効く品を計画的に配置する。</li><li style="margin:8px 0"><span class="tag g">全指標優秀・強化</span> <a href="store_toyama.html" style="color:var(--ink);text-decoration:none">富山TML</a>（Q1 65.7%・在庫0.64）・<a href="store_asahikawa.html" style="color:var(--ink);text-decoration:none">旭川フィール</a>（Q1 75.0%・在庫0.68）＝発注を厚くできる受け皿。優秀な消化を維持しつつ枠を広げる。</li></ul></div>
+</section>
+
+<footer>本ダッシュボードは26SS実績（Q1期消化率・最終消化率・在庫倍率・全社追随率）に基づく全社横断分析です。Q1期消化率＝3〜5月売上÷発注額、最終＝3〜8月。追随率＝各ブランドの自店売上TOP15のうち全店TOP15と一致する品番数÷母数（6ブランド合計、3〜5月）。｜ 各店詳細は個店レポート参照 ｜ TOMORROWLAND フランチャイズ部 ・ 単位:千円</footer>
+</div>
+<script>
+const R=[{"key": "水戸京成", "file": "store_mito.html", "grp": "B", "order": 39124, "q1": 40.4, "fin": 54.6, "lag": 14.2, "inv": 3.13, "follow": 53.3, "type": "発注過多・抑制", "tcls": "b"}, {"key": "そごう千葉", "file": "store_chiba.html", "grp": "A", "order": 22241, "q1": 59.6, "fin": 76.9, "lag": 17.3, "inv": 1.43, "follow": 60.0, "type": "健闘/標準", "tcls": "n"}, {"key": "東武宇都宮", "file": "store_utsunomiya.html", "grp": "D", "order": 21435, "q1": 47.2, "fin": 52.2, "lag": 5.0, "inv": 1.42, "follow": 41.1, "type": "健闘/標準", "tcls": "n"}, {"key": "宮崎山形屋", "file": "store_miyazaki.html", "grp": "D", "order": 13780, "q1": 26.2, "fin": 35.8, "lag": 9.6, "inv": 4.49, "follow": 43.8, "type": "発注過多・抑制", "tcls": "b"}, {"key": "和歌山近鉄", "file": "store_wakayama.html", "grp": "D", "order": 15468, "q1": 44.1, "fin": 51.6, "lag": 7.5, "inv": 1.74, "follow": 32.6, "type": "やや過多", "tcls": "w"}, {"key": "郡山うすい", "file": "store_koriyama.html", "grp": "D", "order": 15682, "q1": 43.0, "fin": 60.6, "lag": 17.6, "inv": 2.44, "follow": 43.3, "type": "発注過多・抑制", "tcls": "b"}, {"key": "鳥取丸由", "file": "store_tottori.html", "grp": "D", "order": 9881, "q1": 48.0, "fin": 74.4, "lag": 26.4, "inv": 1.94, "follow": 40.0, "type": "後伸び型・タイミング見直し", "tcls": "w"}, {"key": "盛岡川徳", "file": "store_morioka.html", "grp": "B", "order": 12231, "q1": 40.8, "fin": 51.8, "lag": 11.0, "inv": 1.9, "follow": 50.0, "type": "やや過多", "tcls": "w"}, {"key": "ながの東急", "file": "store_nagano.html", "grp": "C", "order": 9450, "q1": 50.5, "fin": 60.9, "lag": 10.4, "inv": 1.76, "follow": 45.0, "type": "やや過多", "tcls": "w"}, {"key": "旭川フィール", "file": "store_asahikawa.html", "grp": "A", "order": 17718, "q1": 75.0, "fin": 87.7, "lag": 12.7, "inv": 0.68, "follow": 53.3, "type": "全指標優秀・強化", "tcls": "g"}, {"key": "高崎髙島屋TML", "file": "store_takasaki_tml.html", "grp": "C", "order": 8008, "q1": 59.1, "fin": 70.4, "lag": 11.3, "inv": 1.17, "follow": 43.1, "type": "健闘/標準", "tcls": "n"}, {"key": "川越丸広", "file": "store_kawagoe.html", "grp": "A", "order": 15316, "q1": 55.6, "fin": 70.3, "lag": 14.7, "inv": 1.47, "follow": 53.3, "type": "健闘/標準", "tcls": "n"}, {"key": "富山TML", "file": "store_toyama.html", "grp": "A", "order": 15750, "q1": 65.7, "fin": 84.6, "lag": 18.9, "inv": 0.64, "follow": 62.1, "type": "全指標優秀・強化", "tcls": "g"}, {"key": "福山TML", "file": "store_fukuyama.html", "grp": "A", "order": 17397, "q1": 55.9, "fin": 67.2, "lag": 11.3, "inv": 0.79, "follow": 48.9, "type": "健闘/標準", "tcls": "n"}, {"key": "鹿児島GV", "file": "store_kagoshima_gv.html", "grp": "A", "order": 9837, "q1": 53.5, "fin": 69.2, "lag": 15.7, "inv": 1.27, "follow": 53.3, "type": "健闘/標準", "tcls": "n"}];
+const FC={"q1": 50.4, "fin": 63.8, "inv": 1.69, "follow": 48.2, "lag": 13.4};
+const GC={"A": "#1f8a5b", "B": "#c8922a", "C": "#2D5A8E", "D": "#c0492f"};
+let sortKey='q1',sortAsc=false;
+function col(v,t){
+  if(t==='q1') return v>=FC.q1?'#1f8a5b':(v<40?'#c0492f':'#c8922a');
+  if(t==='fin') return v>=FC.fin?'#1f8a5b':(v<55?'#c0492f':'#c8922a');
+  if(t==='inv') return v>=2.2?'#c0492f':(v<1.0?'#c8922a':'#1f8a5b');
+  if(t==='follow') return v>=FC.follow?'#1f8a5b':'#5a6473';
+  return '#1a1a2e';
+}
+function render(){
+  const cols=[['key','店舗'],['grp','群'],['order','発注'],['q1','Q1期消化'],['fin','最終消化'],['lag','後伸び'],['inv','在庫倍率'],['follow','追随率'],['type','判定']];
+  const arr=[...R].sort((a,b)=>{const x=a[sortKey],y=b[sortKey];if(typeof x==='string')return sortAsc?x.localeCompare(y):y.localeCompare(x);return sortAsc?x-y:y-x;});
+  const fr=[...R].sort((a,b)=>b.follow-a.follow).map(r=>r.key);
+  let h='<thead><tr>'+cols.map(c=>`<th class="sortable${c[0]==='key'||c[0]==='type'?' l':''}" data-k="${c[0]}">${c[1]}${sortKey===c[0]?(sortAsc?' ▲':' ▼'):''}</th>`).join('')+'</tr></thead><tbody>';
+  arr.forEach(s=>{
+    h+=`<tr><td><a href="${s.file}">${s.key}</a></td><td><span class="grptag" style="background:${GC[s.grp]}">${s.grp}</span></td><td>${s.order.toLocaleString()}</td>`;
+    h+=`<td style="color:${col(s.q1,'q1')};font-weight:700">${s.q1}%</td><td style="color:${col(s.fin,'fin')};font-weight:700">${s.fin}%</td>`;
+    h+=`<td style="color:${s.lag>FC.lag?'#c8922a':'#5a6473'}">+${s.lag}</td><td style="color:${col(s.inv,'inv')};font-weight:700">${s.inv}</td>`;
+    h+=`<td style="color:${col(s.follow,'follow')}">${s.follow}% <span style="color:#9aa0a8;font-size:10px">#${fr.indexOf(s.key)+1}</span></td><td class="l"><span class="tag ${s.tcls}">${s.type}</span></td></tr>`;
+  });
+  h+='</tbody>';
+  const t=document.getElementById('rank-tbl');t.innerHTML=h;
+  t.querySelectorAll('.sortable').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortAsc=!sortAsc;else{sortKey=k;sortAsc=(k==='key'||k==='grp'||k==='type');}render();});
+}
+render();
+</script>
+
+</body></html>

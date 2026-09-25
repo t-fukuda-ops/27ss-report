@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>27SS 課題グループ4象限分析</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+  :root{
+    --ink:#1a1a2e; --sub:#5a6473; --line:#e3e7ed; --bg:#EFECE6;
+    --card:#ffffff; --accent:#1f3a5f; --accent2:#2D5A8E;
+    --good:#1f8a5b; --warn:#c8922a; --bad:#c0492f; --barbg:#eef1f5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',"Hiragino Kaku Gothic ProN",system-ui,sans-serif;color:var(--ink);background:var(--bg);
+    line-height:1.6;font-size:13px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px}
+  .wrap.wide{max-width:1000px}
+  header.rpt{border-bottom:3px solid var(--accent);padding-bottom:18px;margin-bottom:8px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--accent2);font-weight:700}
+  h1{font-size:26px;margin:4px 0 2px;letter-spacing:.01em;font-weight:500;text-wrap:balance}
+  .meta{font-size:12.5px;color:var(--sub)}
+  .badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;
+    padding:2px 9px;border-radius:11px;font-weight:700;margin-left:6px;vertical-align:2px}
+  section{margin-top:30px}
+  h2{font-size:16px;border-left:5px solid var(--accent);padding-left:10px;margin-bottom:14px;font-weight:700}
+  .note{font-size:11.5px;color:var(--sub);margin-top:-6px;margin-bottom:12px}
+  .note a,.links a{color:var(--accent2);font-weight:700;text-decoration:none}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px}
+  .kpi .lbl{font-size:11.5px;color:var(--sub);font-weight:600}
+  .kpi .val{font-size:22px;font-weight:700;margin-top:3px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+  .kpi .val.txt{font-size:16px;line-height:1.35;margin-top:6px}
+  .kpi .unit{font-size:12px;font-weight:600;color:var(--sub);margin-left:2px}
+  .kpi .cmp{font-size:11px;margin-top:3px}
+  .up{color:var(--good)} .down{color:var(--bad)} .mid{color:var(--warn)}
+  .tw{overflow-x:auto;border-radius:10px}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  td.l,th.l{text-align:left}
+  thead th{background:var(--accent);color:#fff;font-weight:700;font-size:12px;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr.total{background:#eef2f7;font-weight:700}
+  tbody tr.hl td{background:#fbf6ea}
+  .pos{color:var(--good);font-weight:700}.neg{color:var(--bad);font-weight:700}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .panel h3{font-size:13.5px;margin-bottom:10px;color:var(--accent)}
+  .mini{font-size:12.5px}
+  .tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:10px;font-weight:700;white-space:nowrap}
+  .tag.g{background:#e3f3ea;color:var(--good)} .tag.w{background:#fdf2dd;color:var(--warn)}
+  .tag.b{background:#fae6e0;color:var(--bad)} .tag.n{background:#eef2f7;color:var(--accent)}
+  .insight{background:#fff;border:1px solid var(--line);border-left:5px solid var(--accent);
+    border-radius:8px;padding:14px 16px;font-size:13px;margin-top:14px}
+  .insight strong{color:var(--accent)}
+  .pn{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--sub)}
+  .mk{display:inline-block;font-size:9.5px;font-weight:700;padding:0 6px;border-radius:9px;margin-left:4px;vertical-align:1px}
+  .mk.ss{background:#eef2f7;color:var(--accent)} .mk.thick{background:#e3f3ea;color:var(--good)}
+  .mk.later{background:#fdf2dd;color:var(--warn)} .mk.cross{background:#fae6e0;color:var(--bad)}
+  .donut-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .donut-card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .donut-card.avg{border:2px solid var(--accent)}
+  .donut-ttl{font-size:13px;font-weight:700}
+  .svg-wrap{position:relative;width:200px;height:200px;max-width:100%}
+  .center-info{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;pointer-events:none;width:100px}
+  .ci-rate{font-size:24px;font-weight:500;line-height:1}
+  .ci-lbl{font-size:10px;color:#8a8f99;margin-top:2px}
+  .ci-vals{font-size:10px;color:#6b7280;margin-top:5px;line-height:1.7}
+  .leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;width:100%;margin-top:4px}
+  .leg-item{display:flex;align-items:flex-start;gap:4px;font-size:10px;color:#555;line-height:1.4}
+  .leg-item small{font-size:9px;color:#8a8f99}
+  .leg-sq{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-top:3px}
+  .donut-legendbar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+  .ltag{color:#fff;padding:3px 10px;border-radius:3px;font-size:.72rem;font-weight:500}
+  .bmetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 12px}
+  .bm{background:#f5f2ec;border-radius:6px;padding:7px 9px}
+  .bm .bm-l{font-size:10px;color:var(--sub);font-weight:600}
+  .bm .bm-cmp{display:flex;justify-content:space-between;align-items:baseline;margin-top:3px}
+  .bm .bm-store{font-size:15px;font-weight:800;color:var(--ink)}
+  .bm .bm-avg{font-size:10.5px;color:#8a8f99}
+  .bh{font-size:14px;color:var(--accent);margin:8px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px;display:flex;align-items:center;gap:8px}
+  .bh .sw{width:10px;height:10px;border-radius:2px}
+  .brand{margin-bottom:18px}
+  .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .scatter-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
+  .scatter-wrap svg{width:100%;height:auto;display:block}
+  .quad-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--sub);margin-top:8px}
+  .quad-legend span{display:flex;align-items:center;gap:4px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  table.rank td,table.rank th{padding:8px 8px;font-size:12px}
+  table.rank a{color:var(--accent2);text-decoration:none;font-weight:700}
+  table.rank a:hover{text-decoration:underline}
+  .sortable{cursor:pointer;user-select:none}
+  .sortable:hover{background:var(--accent2)}
+  .grptag{font-size:9.5px;padding:1px 6px;border-radius:8px;color:#fff;font-weight:700}
+  .backlink{display:inline-block;margin-bottom:16px;font-size:12px;color:var(--accent2);text-decoration:none;font-weight:700}
+  .storenav{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  .storenav a{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#eef2f7;color:var(--accent);font-weight:600;text-decoration:none}
+  .storenav a.cur{background:var(--accent);color:#fff}
+  .quad2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;border-top:5px solid var(--accent)}
+  .qcard.good{border-top-color:var(--good)} .qcard.warn{border-top-color:var(--warn)}
+  .qcard.bad{border-top-color:var(--bad)} .qcard.mid{border-top-color:var(--accent2)}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+  .qtitle{font-size:15px;font-weight:700}
+  .qcount{font-size:11px;color:var(--sub);white-space:nowrap}
+  .qavg{font-size:11px;color:var(--sub);background:#f5f2ec;border-radius:5px;padding:5px 9px;margin:8px 0 12px}
+  .stores{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .schip{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#eef2f7;color:var(--accent);font-weight:600;text-decoration:none}
+  .mdl{font-size:12px;margin-top:8px}
+  .mdl b.h{display:inline-block;font-size:11px;padding:1px 8px;border-radius:9px;margin-bottom:3px}
+  .mdl .m b.h{background:#e3f3ea;color:var(--good)}
+  .mdl .d b.h{background:#fae6e0;color:var(--bad)}
+  .mdl .k b.h{background:#fdf2dd;color:var(--warn)}
+  .mdl ul{margin:2px 0 10px 0;padding-left:16px}
+  .mdl li{margin:3px 0;font-size:12px}
+  footer{margin-top:40px;font-size:11px;color:var(--sub);border-top:1px solid var(--line);padding-top:14px}
+  a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+  @media(max-width:760px){.cards,.dash-grid,.bmetrics{grid-template-columns:repeat(2,1fr)}.twocol,.donut-row,.quad2{grid-template-columns:1fr}}
+  @media print{body{background:#fff}.wrap{max-width:none}}
+</style></head><body>
+<div class="wrap wide">
+<a class="backlink" href="index.html">← 全店ダッシュボードへ戻る</a>
+<header class="rpt">
+  <div class="eyebrow">27SS展示会｜26SS実績（Q1期＝3〜5月）本社確認用</div>
+  <h1>課題グループ 4象限分析</h1>
+  <div class="meta">テーマは「Q1期（3〜5月）の売上をどう上げるか」。全社追随率（横軸）× Q1期消化率（縦軸）で15店を4群に分ける。どの群も今より売上を上げるための課題グループで、優劣ではない。各群は「傾向（仮説）」までを示し、真因は店との議論で深掘りする。基準線：追随率48.2%／Q1期消化率50.4%</div>
+</header>
+
+<section>
+  <h2>散布図</h2>
+  <p class="note">横軸＝全社追随率（全社の売れ筋をどれだけ取れているか）／縦軸＝Q1期消化率。点の大きさ＝発注額、破線＝FC平均。点をクリックで個店レポートへ。</p>
+  <div class="scatter-wrap"><svg viewBox="0 0 720 460" role="img" aria-label="全社追随率 × Q1期消化率 散布図"><rect x="381.2" y="20.0" width="318.8" height="192.4" fill="#1f8a5b" opacity="0.05"/><rect x="381.2" y="212.4" width="318.8" height="197.6" fill="#c8922a" opacity="0.05"/><rect x="56.0" y="20.0" width="325.2" height="192.4" fill="#2D5A8E" opacity="0.05"/><rect x="56.0" y="212.4" width="325.2" height="197.6" fill="#c0492f" opacity="0.05"/><line x1="88.2" x2="88.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="88.2" y="430" text-anchor="middle" font-size="10" fill="#888">30%</text><line x1="168.7" x2="168.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="168.7" y="430" text-anchor="middle" font-size="10" fill="#888">35%</text><line x1="249.2" x2="249.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="249.2" y="430" text-anchor="middle" font-size="10" fill="#888">40%</text><line x1="329.7" x2="329.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="329.7" y="430" text-anchor="middle" font-size="10" fill="#888">45%</text><line x1="410.2" x2="410.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="410.2" y="430" text-anchor="middle" font-size="10" fill="#888">50%</text><line x1="490.7" x2="490.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="490.7" y="430" text-anchor="middle" font-size="10" fill="#888">55%</text><line x1="571.2" x2="571.2" y1="20" y2="410" stroke="#f0f0f0"/><text x="571.2" y="430" text-anchor="middle" font-size="10" fill="#888">60%</text><line x1="651.7" x2="651.7" y1="20" y2="410" stroke="#f0f0f0"/><text x="651.7" y="430" text-anchor="middle" font-size="10" fill="#888">65%</text><line x1="56" x2="700" y1="410.0" y2="410.0" stroke="#f0f0f0"/><text x="48" y="413.0" text-anchor="end" font-size="10" fill="#888">20%</text><line x1="56" x2="700" y1="345.0" y2="345.0" stroke="#f0f0f0"/><text x="48" y="348.0" text-anchor="end" font-size="10" fill="#888">30%</text><line x1="56" x2="700" y1="280.0" y2="280.0" stroke="#f0f0f0"/><text x="48" y="283.0" text-anchor="end" font-size="10" fill="#888">40%</text><line x1="56" x2="700" y1="215.0" y2="215.0" stroke="#f0f0f0"/><text x="48" y="218.0" text-anchor="end" font-size="10" fill="#888">50%</text><line x1="56" x2="700" y1="150.0" y2="150.0" stroke="#f0f0f0"/><text x="48" y="153.0" text-anchor="end" font-size="10" fill="#888">60%</text><line x1="56" x2="700" y1="85.0" y2="85.0" stroke="#f0f0f0"/><text x="48" y="88.0" text-anchor="end" font-size="10" fill="#888">70%</text><line x1="56" x2="700" y1="20.0" y2="20.0" stroke="#f0f0f0"/><text x="48" y="23.0" text-anchor="end" font-size="10" fill="#888">80%</text><line x1="381.2" x2="381.2" y1="20" y2="410" stroke="#c8b8a0" stroke-dasharray="4 3"/><line x1="56" x2="700" y1="212.4" y2="212.4" stroke="#c8b8a0" stroke-dasharray="4 3"/><text x="692" y="36.0" text-anchor="end" font-size="12" font-weight="700" fill="#1f8a5b">A 数量を積む</text><text x="692" y="402.0" text-anchor="end" font-size="12" font-weight="700" fill="#c8922a">B 打ち出し・VMD</text><text x="64" y="36.0" text-anchor="start" font-size="12" font-weight="700" fill="#2D5A8E">C 客数</text><text x="64" y="402.0" text-anchor="start" font-size="12" font-weight="700" fill="#c0492f">D 品ぞろえの適合</text><text x="378.0" y="452" text-anchor="middle" font-size="11" fill="#666">全社追随率 →（全社の売れ筋を取れている）</text><text transform="translate(14,215.0) rotate(-90)" text-anchor="middle" font-size="11" fill="#666">Q1期消化率 ↑（3〜5月）</text><a href="store_mito.html"><circle cx="463.3" cy="277.4" r="15.0" fill="#c8922a" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="481.3" y="280.4" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">水戸京成</text></a><a href="store_chiba.html"><circle cx="571.2" cy="152.6" r="12.8" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="587.0" y="155.6" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">そごう千葉</text></a><a href="store_utsunomiya.html"><circle cx="266.9" cy="233.2" r="12.7" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="282.6" y="236.2" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">東武宇都宮</text></a><a href="store_asahikawa.html"><circle cx="463.3" cy="52.5" r="12.1" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="478.4" y="55.5" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">旭川フィール</text></a><a href="store_fukuyama.html"><circle cx="392.5" cy="176.7" r="12.0" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="407.5" y="179.7" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">福山TML</text></a><a href="store_toyama.html"><circle cx="605.0" cy="112.9" r="11.7" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="619.7" y="115.9" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">富山TML</text></a><a href="store_koriyama.html"><circle cx="302.3" cy="260.5" r="11.7" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="317.0" y="263.5" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">郡山うすい</text></a><a href="store_wakayama.html"><circle cx="130.1" cy="253.3" r="11.7" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="144.7" y="256.4" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">和歌山近鉄</text></a><a href="store_kawagoe.html"><circle cx="463.3" cy="178.6" r="11.6" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="478.0" y="181.6" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">川越丸広</text></a><a href="store_miyazaki.html"><circle cx="310.4" cy="369.7" r="11.3" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="324.7" y="372.7" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">宮崎山形屋</text></a><a href="store_morioka.html"><circle cx="410.2" cy="274.8" r="11.0" fill="#c8922a" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="410.2" y="296.8" text-anchor="middle" font-size="9.5" font-weight="400" fill="#444">盛岡川徳</text></a><a href="store_tottori.html"><circle cx="249.2" cy="228.0" r="10.5" fill="#c0492f" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="249.2" y="249.5" text-anchor="middle" font-size="9.5" font-weight="400" fill="#444">鳥取丸由</text></a><a href="store_kagoshima_gv.html"><circle cx="463.3" cy="192.2" r="10.5" fill="#1f8a5b" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="476.8" y="195.2" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">鹿児島GV</text></a><a href="store_nagano.html"><circle cx="329.7" cy="211.8" r="10.4" fill="#2D5A8E" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="343.1" y="214.8" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">ながの東急</text></a><a href="store_takasaki_tml.html"><circle cx="299.1" cy="155.8" r="10.1" fill="#2D5A8E" opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="312.2" y="158.8" text-anchor="start" font-size="9.5" font-weight="400" fill="#444">高崎髙島屋TML</text></a></svg><div class="quad-legend"><span><span class="dot" style="background:#1f8a5b"></span>A 数量を積むを伸ばす（追随高 × 消化高）</span><span><span class="dot" style="background:#c8922a"></span>B 打ち出し・VMDを伸ばす（追随高 × 消化低）</span><span><span class="dot" style="background:#2D5A8E"></span>C 客数を伸ばす（追随低 × 消化高）</span><span><span class="dot" style="background:#c0492f"></span>D 品ぞろえの適合を伸ばす（追随低 × 消化低）</span><span>点の大きさ＝発注額／破線＝FC平均</span></div></div>
+</section>
+
+<section>
+  <h2>4つの課題グループ</h2>
+  <p class="note">売上＝客数×客単価×セット率×消化。群ごとに「どの要素を伸ばすか」の軸が違う。傾向は仮説であり、同じ群でも真因は店ごとに異なる。「店と確かめる」問いを議論の出発点にする。</p>
+  <div class="quad2"><div class="qcard good">
+  <div class="qhead"><span class="qtitle"><span class="grptag" style="background:#1f8a5b;font-size:11px;padding:1px 7px">A</span> 数量を積むを伸ばす（追随高 × 消化高）</span><span class="qcount">6店</span></div>
+  <div class="qavg">平均 追随55.2%／Q1期消化60.9%（発注加重61.5%）／最終76.0%／在庫1.05／発注計98,259千円</div>
+  <div class="stores"><a class="schip" href="store_asahikawa.html">旭川フィール 75.0%</a><a class="schip" href="store_toyama.html">富山TML 65.7%</a><a class="schip" href="store_chiba.html">そごう千葉 59.6%</a><a class="schip" href="store_fukuyama.html">福山TML 55.9%</a><a class="schip" href="store_kawagoe.html">川越丸広 55.6%</a><a class="schip" href="store_kagoshima_gv.html">鹿児島GV 53.5%</a></div>
+  <div class="mdl">
+    <div class="m"><b class="h">象限の特性</b><ul><li><b>全社の売れ筋を旬で売り切れている</b></li></ul></div>
+    <div class="d"><b class="h">傾向（仮説）</b><ul><li>全社の売れ筋が自店でも上位で、勝負期間に売り切れている。</li></ul></div>
+    <div class="k"><b class="h">店と確かめる</b><ul><li>品薄で逃した客はいたか。まだ積めるのか、それとも既に上限か。伸びしろは「取りこぼしの回収」にあるか。</li></ul></div>
+  </div>
+</div><div class="qcard warn">
+  <div class="qhead"><span class="qtitle"><span class="grptag" style="background:#c8922a;font-size:11px;padding:1px 7px">B</span> 打ち出し・VMDを伸ばす（追随高 × 消化低）</span><span class="qcount">2店</span></div>
+  <div class="qavg">平均 追随51.6%／Q1期消化40.6%（発注加重40.5%）／最終53.2%／在庫2.51／発注計51,355千円</div>
+  <div class="stores"><a class="schip" href="store_morioka.html">盛岡川徳 40.8%</a><a class="schip" href="store_mito.html">水戸京成 40.4%</a></div>
+  <div class="mdl">
+    <div class="m"><b class="h">象限の特性</b><ul><li><b>売れ筋は入っているが売り期の流れとズレやすい</b></li></ul></div>
+    <div class="d"><b class="h">傾向（仮説）</b><ul><li>全社の売れ筋は取れているが、お客様のシーズン進行がスローで、全体の売り期の流れとズレやすい傾向。売れ筋があるぶん、押し出し次第で取り切れる。</li></ul></div>
+    <div class="k"><b class="h">店と確かめる</b><ul><li>打ち出しの強化・VMDで早期に見せ切れているか。チーム統一の目標設定で足並みを揃え、旬のうちに売り切る意識を持てているか。</li></ul></div>
+  </div>
+</div><div class="qcard mid">
+  <div class="qhead"><span class="qtitle"><span class="grptag" style="background:#2D5A8E;font-size:11px;padding:1px 7px">C</span> 客数を伸ばす（追随低 × 消化高）</span><span class="qcount">2店</span></div>
+  <div class="qavg">平均 追随44.0%／Q1期消化54.8%（発注加重54.4%）／最終65.7%／在庫1.46／発注計17,458千円</div>
+  <div class="stores"><a class="schip" href="store_takasaki_tml.html">高崎髙島屋TML 59.1%</a><a class="schip" href="store_nagano.html">ながの東急 50.5%</a></div>
+  <div class="mdl">
+    <div class="m"><b class="h">象限の特性</b><ul><li><b>独自の品で売り切れている</b></li></ul></div>
+    <div class="d"><b class="h">傾向（仮説）</b><ul><li>全社と違う品ぞろえで、勝負期間の消化は高い。</li></ul></div>
+    <div class="k"><b class="h">店と確かめる</b><ul><li>独自のファンを掴んでいて独自路線をさらに伸ばすのか、全社の売れ筋を活かしきれておらず取り込めばファンを広げられるのか。</li></ul></div>
+  </div>
+</div><div class="qcard bad">
+  <div class="qhead"><span class="qtitle"><span class="grptag" style="background:#c0492f;font-size:11px;padding:1px 7px">D</span> 品ぞろえの適合を伸ばす（追随低 × 消化低）</span><span class="qcount">5店</span></div>
+  <div class="qavg">平均 追随40.2%／Q1期消化41.7%（発注加重42.0%）／最終54.9%／在庫2.41／発注計76,246千円</div>
+  <div class="stores"><a class="schip" href="store_tottori.html">鳥取丸由 48.0%</a><a class="schip" href="store_utsunomiya.html">東武宇都宮 47.2%</a><a class="schip" href="store_wakayama.html">和歌山近鉄 44.1%</a><a class="schip" href="store_koriyama.html">郡山うすい 43.0%</a><a class="schip" href="store_miyazaki.html">宮崎山形屋 26.2%</a></div>
+  <div class="mdl">
+    <div class="m"><b class="h">象限の特性</b><ul><li><b>独自路線で、売り期の流れともズレやすい</b></li></ul></div>
+    <div class="d"><b class="h">傾向（仮説）</b><ul><li>全社の売れ筋も取れず、お客様のシーズン進行もスローで、全体の売り期の流れとズレやすい傾向。品ぞろえ・打ち出しの複数要因が重なりやすい。</li></ul></div>
+    <div class="k"><b class="h">店と確かめる</b><ul><li>品ぞろえと客層のズレか、打ち出し・VMDの弱さか、その両方か。チーム統一の目標設定で、まず何を全社の流れに合わせにいくのか。</li></ul></div>
+  </div>
+</div></div>
+</section>
+
+<footer>追随率＝各ブランドの自店売上TOP15のうち全店TOP15と一致する品番数÷母数（6ブランド合計、3〜5月）。FC平均48.2%。Q1期消化率＝3〜5月売上÷発注額、FC平均50.4%。<br>
+※ Q1期消化率の低さは店の優劣ではなく、お客様のシーズン進行がスロー＝全体の売り期の流れとズレやすい特性。打ち出しの強化・VMDとチーム統一の目標設定で、旬に売り切る意識を揃えることが打ち手になる。<br>
+※ 後伸び型（Q1は低いが最終で伸びる店）も、Q1テーマではD（Q1でお客様の期待と発注内容がズレている）として扱う。｜ TOMORROWLAND フランチャイズ部 ・ 27SS展示会 ・ 単位:千円</footer>
+</div>
+
+
+</body></html>

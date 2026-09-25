@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>27SS展示会 店舗別実績レポート｜ながの東急</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+  :root{
+    --ink:#1a1a2e; --sub:#5a6473; --line:#e3e7ed; --bg:#EFECE6;
+    --card:#ffffff; --accent:#1f3a5f; --accent2:#2D5A8E;
+    --good:#1f8a5b; --warn:#c8922a; --bad:#c0492f; --barbg:#eef1f5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',"Hiragino Kaku Gothic ProN",system-ui,sans-serif;color:var(--ink);background:var(--bg);
+    line-height:1.6;font-size:13px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px}
+  .wrap.wide{max-width:1000px}
+  header.rpt{border-bottom:3px solid var(--accent);padding-bottom:18px;margin-bottom:8px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--accent2);font-weight:700}
+  h1{font-size:26px;margin:4px 0 2px;letter-spacing:.01em;font-weight:500;text-wrap:balance}
+  .meta{font-size:12.5px;color:var(--sub)}
+  .badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;
+    padding:2px 9px;border-radius:11px;font-weight:700;margin-left:6px;vertical-align:2px}
+  section{margin-top:30px}
+  h2{font-size:16px;border-left:5px solid var(--accent);padding-left:10px;margin-bottom:14px;font-weight:700}
+  .note{font-size:11.5px;color:var(--sub);margin-top:-6px;margin-bottom:12px}
+  .note a,.links a{color:var(--accent2);font-weight:700;text-decoration:none}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px}
+  .kpi .lbl{font-size:11.5px;color:var(--sub);font-weight:600}
+  .kpi .val{font-size:22px;font-weight:700;margin-top:3px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+  .kpi .val.txt{font-size:16px;line-height:1.35;margin-top:6px}
+  .kpi .unit{font-size:12px;font-weight:600;color:var(--sub);margin-left:2px}
+  .kpi .cmp{font-size:11px;margin-top:3px}
+  .up{color:var(--good)} .down{color:var(--bad)} .mid{color:var(--warn)}
+  .tw{overflow-x:auto;border-radius:10px}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  td.l,th.l{text-align:left}
+  thead th{background:var(--accent);color:#fff;font-weight:700;font-size:12px;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr.total{background:#eef2f7;font-weight:700}
+  tbody tr.hl td{background:#fbf6ea}
+  .pos{color:var(--good);font-weight:700}.neg{color:var(--bad);font-weight:700}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .panel h3{font-size:13.5px;margin-bottom:10px;color:var(--accent)}
+  .mini{font-size:12.5px}
+  .tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:10px;font-weight:700;white-space:nowrap}
+  .tag.g{background:#e3f3ea;color:var(--good)} .tag.w{background:#fdf2dd;color:var(--warn)}
+  .tag.b{background:#fae6e0;color:var(--bad)} .tag.n{background:#eef2f7;color:var(--accent)}
+  .insight{background:#fff;border:1px solid var(--line);border-left:5px solid var(--accent);
+    border-radius:8px;padding:14px 16px;font-size:13px;margin-top:14px}
+  .insight strong{color:var(--accent)}
+  .pn{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--sub)}
+  .mk{display:inline-block;font-size:9.5px;font-weight:700;padding:0 6px;border-radius:9px;margin-left:4px;vertical-align:1px}
+  .mk.ss{background:#eef2f7;color:var(--accent)} .mk.thick{background:#e3f3ea;color:var(--good)}
+  .mk.later{background:#fdf2dd;color:var(--warn)} .mk.cross{background:#fae6e0;color:var(--bad)}
+  .donut-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .donut-card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .donut-card.avg{border:2px solid var(--accent)}
+  .donut-ttl{font-size:13px;font-weight:700}
+  .svg-wrap{position:relative;width:200px;height:200px;max-width:100%}
+  .center-info{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;pointer-events:none;width:100px}
+  .ci-rate{font-size:24px;font-weight:500;line-height:1}
+  .ci-lbl{font-size:10px;color:#8a8f99;margin-top:2px}
+  .ci-vals{font-size:10px;color:#6b7280;margin-top:5px;line-height:1.7}
+  .leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;width:100%;margin-top:4px}
+  .leg-item{display:flex;align-items:flex-start;gap:4px;font-size:10px;color:#555;line-height:1.4}
+  .leg-item small{font-size:9px;color:#8a8f99}
+  .leg-sq{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-top:3px}
+  .donut-legendbar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+  .ltag{color:#fff;padding:3px 10px;border-radius:3px;font-size:.72rem;font-weight:500}
+  .bmetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 12px}
+  .bm{background:#f5f2ec;border-radius:6px;padding:7px 9px}
+  .bm .bm-l{font-size:10px;color:var(--sub);font-weight:600}
+  .bm .bm-cmp{display:flex;justify-content:space-between;align-items:baseline;margin-top:3px}
+  .bm .bm-store{font-size:15px;font-weight:800;color:var(--ink)}
+  .bm .bm-avg{font-size:10.5px;color:#8a8f99}
+  .bh{font-size:14px;color:var(--accent);margin:8px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px;display:flex;align-items:center;gap:8px}
+  .bh .sw{width:10px;height:10px;border-radius:2px}
+  .brand{margin-bottom:18px}
+  .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .scatter-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
+  .scatter-wrap svg{width:100%;height:auto;display:block}
+  .quad-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--sub);margin-top:8px}
+  .quad-legend span{display:flex;align-items:center;gap:4px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  table.rank td,table.rank th{padding:8px 8px;font-size:12px}
+  table.rank a{color:var(--accent2);text-decoration:none;font-weight:700}
+  table.rank a:hover{text-decoration:underline}
+  .sortable{cursor:pointer;user-select:none}
+  .sortable:hover{background:var(--accent2)}
+  .grptag{font-size:9.5px;padding:1px 6px;border-radius:8px;color:#fff;font-weight:700}
+  .backlink{display:inline-block;margin-bottom:16px;font-size:12px;color:var(--accent2);text-decoration:none;font-weight:700}
+  .storenav{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  .storenav a{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#eef2f7;color:var(--accent);font-weight:600;text-decoration:none}
+  .storenav a.cur{background:var(--accent);color:#fff}
+  .quad2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;border-top:5px solid var(--accent)}
+  .qcard.good{border-top-color:var(--good)} .qcard.warn{border-top-color:var(--warn)}
+  .qcard.bad{border-top-color:var(--bad)} .qcard.mid{border-top-color:var(--accent2)}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+  .qtitle{font-size:15px;font-weight:700}
+  .qcount{font-size:11px;color:var(--sub);white-space:nowrap}
+  .qavg{font-size:11px;color:var(--sub);background:#f5f2ec;border-radius:5px;padding:5px 9px;margin:8px 0 12px}
+  .stores{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .schip{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#eef2f7;color:var(--accent);font-weight:600;text-decoration:none}
+  .mdl{font-size:12px;margin-top:8px}
+  .mdl b.h{display:inline-block;font-size:11px;padding:1px 8px;border-radius:9px;margin-bottom:3px}
+  .mdl .m b.h{background:#e3f3ea;color:var(--good)}
+  .mdl .d b.h{background:#fae6e0;color:var(--bad)}
+  .mdl .k b.h{background:#fdf2dd;color:var(--warn)}
+  .mdl ul{margin:2px 0 10px 0;padding-left:16px}
+  .mdl li{margin:3px 0;font-size:12px}
+  footer{margin-top:40px;font-size:11px;color:var(--sub);border-top:1px solid var(--line);padding-top:14px}
+  a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+  @media(max-width:760px){.cards,.dash-grid,.bmetrics{grid-template-columns:repeat(2,1fr)}.twocol,.donut-row,.quad2{grid-template-columns:1fr}}
+  @media print{body{background:#fff}.wrap{max-width:none}}
+</style></head><body>
+<div class="wrap">
+<a class="backlink" href="index.html">← 全店ダッシュボードへ戻る</a>
+<header class="rpt">
+  <div class="eyebrow">27SS展示会｜26SS実績ベース 店舗別分析レポート</div>
+  <h1>ながの東急<span class="badge" style="background:#2D5A8E">グループC　客数</span></h1>
+  <div class="meta">分析期間：26SS（Q1期＝2026年3〜5月／最終＝3〜8月）／単位：千円　※消化率＝売上金額÷発注金額、TOP10・集中度・追随率は3〜5月売上</div>
+  <div class="storenav"><a href="store_asahikawa.html">旭川フィール</a><a href="store_toyama.html">富山TML</a><a href="store_chiba.html">そごう千葉</a><a href="store_fukuyama.html">福山TML</a><a href="store_kawagoe.html">川越丸広</a><a href="store_kagoshima_gv.html">鹿児島GV</a><a href="store_morioka.html">盛岡川徳</a><a href="store_mito.html">水戸京成</a><a href="store_takasaki_tml.html">高崎髙島屋TML</a><a href="store_nagano.html" class="cur">ながの東急</a><a href="store_tottori.html">鳥取丸由</a><a href="store_utsunomiya.html">東武宇都宮</a><a href="store_wakayama.html">和歌山近鉄</a><a href="store_koriyama.html">郡山うすい</a><a href="store_miyazaki.html">宮崎山形屋</a></div>
+</header>
+
+<section>
+  <h2>サマリKPI</h2>
+  <div class="cards">
+    <div class="kpi"><div class="lbl">26SS発注額</div><div class="val">9,450<span class="unit">千円</span></div><div class="cmp" style="color:var(--sub)">FC15店中14位／FC計の3.9%</div></div>
+    <div class="kpi"><div class="lbl">Q1期消化率（3〜5月）</div><div class="val">50.5<span class="unit">%</span></div><div class="cmp"><span class="up">▲ FC平均50.4%比 +0.1pt</span></div></div>
+    <div class="kpi"><div class="lbl">最終消化率（3〜8月）</div><div class="val">60.9<span class="unit">%</span></div><div class="cmp"><span class="down">▼ FC平均63.8%比 -2.9pt</span></div></div>
+    <div class="kpi"><div class="lbl">在庫倍率</div><div class="val">1.76</div><div class="cmp"><span class="down">▲ FC平均1.69比 +0.07</span></div></div>
+    <div class="kpi"><div class="lbl">全社追随率</div><div class="val">45.0<span class="unit">%</span></div><div class="cmp mid">中間／FC15店中9位（平均48.2%）</div></div>
+    <div class="kpi"><div class="lbl">後伸び幅（最終−Q1）</div><div class="val">+10.4<span class="unit">pt</span></div><div class="cmp up">FC平均+13.4pt以下＝旬で売れている</div></div>
+    <div class="kpi"><div class="lbl">課題グループ</div><div class="val txt" style="color:#2D5A8E">C｜客数</div><div class="cmp" style="color:var(--sub)">追随低 × 消化高</div></div>
+    <div class="kpi"><div class="lbl">発注判定</div><div class="val txt"><span class="tag w" style="font-size:13px;padding:2px 10px">やや過多</span></div><div class="cmp" style="color:var(--sub)">Q1期消化 FC15店中8位</div></div></div>
+  <div class="insight"><strong>この店の発注判断</strong>　やや在庫過多。即売れ品に寄せ、動きの鈍い品番を絞る。</div>
+  <div class="insight" style="border-left-color:#2D5A8E"><strong style="color:#2D5A8E">課題グループC「客数を伸ばす」</strong>　独自の品で売り切れている<br>
+  <span class="tag n">傾向</span> 全社と違う品ぞろえで、勝負期間の消化は高い。<br><span class="tag w" style="margin-top:4px">店と確かめる</span> 独自のファンを掴んでいて独自路線をさらに伸ばすのか、全社の売れ筋を活かしきれておらず取り込めばファンを広げられるのか。</div>
+</section>
+
+<section>
+  <h2>① 発注シェア vs 売上シェア（ドーナツ対比）</h2>
+  <p class="note">外環＝売上シェア（3〜5月）／内環＝26SS発注シェア　｜　円中央＝Q1期消化率・発注・Q1売上（千円、発注×消化率）。左＝ながの東急／右＝FC全店平均。発注より売上シェアが大きいブランドは伸びしろ、逆は過剰配分の兆し。</p>
+  <div class="donut-legendbar"><span class="ltag" style="background:#2D5A8E">Ballsey</span><span class="ltag" style="background:#5B8DB8">MACPHEE</span><span class="ltag" style="background:#8BAFD4">collection</span><span class="ltag" style="background:#B5CDE4">col⑭</span><span class="ltag" style="background:#C84B31">DES PRES</span><span class="ltag" style="background:#E8956D">GV</span><span class="ltag" style="background:#7BAE7F">SOU.w</span><span class="ltag" style="background:#C9B86A">SOU.g</span></div>
+  <div class="donut-row"><div class="donut-card"><div class="donut-ttl">ながの東急</div><div class="svg-wrap"><svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="発注シェアと売上シェア"><path d="M100.00 8.00A92 92 0 0 1 117.90 190.24L114.20 171.60A73 73 0 0 0 100.00 27.00Z" fill="#2D5A8E" opacity="0.93"/><path d="M115.53 190.68A92 92 0 0 1 10.45 78.90L28.95 83.26A73 73 0 0 0 112.32 171.95Z" fill="#5B8DB8" opacity="0.93"/><path d="M11.04 76.56A92 92 0 0 1 42.63 28.08L54.48 42.93A73 73 0 0 0 29.41 81.40Z" fill="#8BAFD4" opacity="0.93"/><path d="M44.53 26.60A92 92 0 0 1 91.82 8.36L93.51 27.29A73 73 0 0 0 55.99 41.76Z" fill="#B5CDE4" opacity="0.93"/><path d="M94.22 8.18A92 92 0 0 1 95.86 8.09L96.71 27.07A73 73 0 0 0 95.42 27.14Z" fill="#7BAE7F" opacity="0.93"/><path d="M98.27 8.02A92 92 0 0 1 97.59 8.03L98.09 27.03A73 73 0 0 0 98.62 27.01Z" fill="#C9B86A" opacity="0.93"/><path d="M100.00 29.00A71 71 0 0 1 123.28 167.08L117.71 151.01A54 54 0 0 0 100.00 46.00Z" fill="#2D5A8E" opacity="0.93"/><path d="M121.52 167.66A71 71 0 0 1 29.00 99.63L46.00 99.72A54 54 0 0 0 116.36 151.46Z" fill="#5B8DB8" opacity="0.93"/><path d="M29.04 97.77A71 71 0 0 1 43.31 57.25L56.89 67.49A54 54 0 0 0 46.03 98.30Z" fill="#8BAFD4" opacity="0.93"/><path d="M44.45 55.78A71 71 0 0 1 86.19 30.36L89.49 47.03A54 54 0 0 0 57.75 66.37Z" fill="#B5CDE4" opacity="0.93"/><path d="M88.01 30.02A71 71 0 0 1 94.13 29.24L95.54 46.18A54 54 0 0 0 90.88 46.78Z" fill="#7BAE7F" opacity="0.93"/><path d="M95.99 29.11A71 71 0 0 1 98.14 29.02L98.59 46.02A54 54 0 0 0 96.95 46.09Z" fill="#C9B86A" opacity="0.93"/><circle cx="100" cy="100" r="72" fill="none" stroke="#fff" stroke-width="2.5"/><text x="130.7" y="28.0" text-anchor="middle" font-size="10" font-weight="500" fill="#fff">売上</text><text x="123.6" y="45.6" text-anchor="middle" font-size="10" font-weight="500" fill="#fff">発注</text></svg><div class="center-info"><div class="ci-rate">50.5%</div><div class="ci-lbl">Q1期消化率</div><div class="ci-vals">発注 9,450<br>Q1売上 4,772<br><span style="font-size:9px">千円</span></div></div></div><div class="leg-grid"><div class="leg-item"><span class="leg-sq" style="background:#2D5A8E"></span><span>Ballsey<br><small>売47.3% 発45.1%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#5B8DB8"></span><span>MACPHEE<br><small>売31.8% 発30.4%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#8BAFD4"></span><span>collection<br><small>売10.6% 発10.2%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#B5CDE4"></span><span>col⑭<br><small>売9.3% 発11.6%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#7BAE7F"></span><span>SOU.w<br><small>売0.7% 発1.8%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#C9B86A"></span><span>SOU.g<br><small>売0.3% 発0.9%</small></span></div></div></div><div class="donut-card avg"><div class="donut-ttl">FC全店平均</div><div class="svg-wrap"><svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="発注シェアと売上シェア"><path d="M100.00 8.00A92 92 0 0 1 190.05 118.85L171.45 114.95A73 73 0 0 0 100.00 27.00Z" fill="#2D5A8E" opacity="0.93"/><path d="M189.53 121.20A92 92 0 0 1 112.77 191.11L110.13 172.29A73 73 0 0 0 171.04 116.82Z" fill="#5B8DB8" opacity="0.93"/><path d="M110.38 191.41A92 92 0 0 1 45.53 174.15L56.78 158.83A73 73 0 0 0 108.24 172.53Z" fill="#8BAFD4" opacity="0.93"/><path d="M43.61 172.69A92 92 0 0 1 18.60 142.88L35.41 134.02A73 73 0 0 0 55.26 157.68Z" fill="#B5CDE4" opacity="0.93"/><path d="M17.51 140.73A92 92 0 0 1 10.63 121.85L29.09 117.34A73 73 0 0 0 34.55 132.32Z" fill="#C84B31" opacity="0.93"/><path d="M10.09 119.50A92 92 0 0 1 90.67 8.47L92.60 27.38A73 73 0 0 0 28.66 115.48Z" fill="#E8956D" opacity="0.93"/><path d="M93.07 8.26A92 92 0 0 1 95.86 8.09L96.71 27.07A73 73 0 0 0 94.50 27.21Z" fill="#7BAE7F" opacity="0.93"/><path d="M98.27 8.02A92 92 0 0 1 98.17 8.02L98.55 27.01A73 73 0 0 0 98.62 27.01Z" fill="#C9B86A" opacity="0.93"/><path d="M100.00 29.00A71 71 0 0 1 169.00 116.72L152.48 112.72A54 54 0 0 0 100.00 46.00Z" fill="#2D5A8E" opacity="0.93"/><path d="M168.54 118.52A71 71 0 0 1 108.97 170.43L106.82 153.57A54 54 0 0 0 152.13 114.09Z" fill="#5B8DB8" opacity="0.93"/><path d="M107.13 170.64A71 71 0 0 1 59.42 158.26L69.14 144.31A54 54 0 0 0 105.42 153.73Z" fill="#8BAFD4" opacity="0.93"/><path d="M57.91 157.18A71 71 0 0 1 38.70 135.82L53.38 127.24A54 54 0 0 0 67.99 143.49Z" fill="#B5CDE4" opacity="0.93"/><path d="M37.78 134.20A71 71 0 0 1 30.45 114.25L47.10 110.84A54 54 0 0 0 52.68 126.01Z" fill="#C84B31" opacity="0.93"/><path d="M30.10 112.43A71 71 0 0 1 90.59 29.63L92.84 46.48A54 54 0 0 0 46.83 109.45Z" fill="#E8956D" opacity="0.93"/><path d="M92.43 29.40A71 71 0 0 1 95.47 29.14L96.55 46.11A54 54 0 0 0 94.24 46.31Z" fill="#7BAE7F" opacity="0.93"/><path d="M97.32 29.05A71 71 0 0 1 97.70 29.04L98.25 46.03A54 54 0 0 0 97.96 46.04Z" fill="#C9B86A" opacity="0.93"/><circle cx="100" cy="100" r="72" fill="none" stroke="#fff" stroke-width="2.5"/><text x="130.7" y="28.0" text-anchor="middle" font-size="10" font-weight="500" fill="#fff">売上</text><text x="123.6" y="45.6" text-anchor="middle" font-size="10" font-weight="500" fill="#fff">発注</text></svg><div class="center-info"><div class="ci-rate">50.4%</div><div class="ci-lbl">Q1期消化率</div><div class="ci-vals">発注 243,318<br>Q1売上 122,632<br><span style="font-size:9px">千円</span></div></div></div><div class="leg-grid"><div class="leg-item"><span class="leg-sq" style="background:#2D5A8E"></span><span>Ballsey<br><small>売28.7% 発29.2%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#5B8DB8"></span><span>MACPHEE<br><small>売19.5% 発19.2%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#8BAFD4"></span><span>collection<br><small>売12.3% 発11.7%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#B5CDE4"></span><span>col⑭<br><small>売7.2% 発6.9%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#C84B31"></span><span>DES PRES<br><small>売3.9% 発5.2%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#E8956D"></span><span>GV<br><small>売27.2% 発26.1%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#7BAE7F"></span><span>SOU.w<br><small>売0.9% 発1.1%</small></span></div><div class="leg-item"><span class="leg-sq" style="background:#C9B86A"></span><span>SOU.g<br><small>売0.4% 発0.5%</small></span></div></div></div></div>
+</section>
+
+<section>
+  <h2>② ブランド別 売上TOP10品番（3〜5月）</h2>
+  <p class="note">黄色行＝26SS発注品番。<span class="mk ss">26SS</span>26SS発注品 <span class="mk thick">厚</span>Q1に厚くすべき（即売れ） <span class="mk later">後</span>見切ってはいけない（後で効く）。集中度が高いほど少数品番に売上が偏る。単位：千円。</p>
+  <div class="brand"><h3 class="bh"><span class="sw" style="background:#2D5A8E"></span>Ballsey</h3>
+<div class="bmetrics">
+<div class="bm"><div class="bm-l">TOP10集中度</div><div class="bm-cmp"><span class="bm-store">30.4%</span><span class="bm-avg">TOP10÷ブランド売上</span></div></div>
+<div class="bm"><div class="bm-l">ブランド売上（3〜5月）</div><div class="bm-cmp"><span class="bm-store">4,609</span><span class="bm-avg">千円</span></div></div>
+<div class="bm"><div class="bm-l">TOP10のうち26SS発注品</div><div class="bm-cmp"><span class="bm-store">4</span><span class="bm-avg">/10品番</span></div></div>
+<div class="bm"><div class="bm-l">厚／後 マーク</div><div class="bm-cmp"><span class="bm-store">2／0</span><span class="bm-avg">品番</span></div></div>
+</div>
+<div class="tw"><table class="mini"><thead><tr><th>#</th><th class="l">商品名</th><th class="l">品番</th><th>売上</th></tr></thead><tbody><tr><td>1</td><td class="l">2WAYｽﾄﾚｯﾁﾜｲ</td><td class="pn l">11041404203</td><td>288</td></tr><tr class="hl"><td>2</td><td class="l">ﾀｲﾙﾓﾁｰﾌEMB<span class="mk ss">26SS</span><span class="mk thick">厚</span></td><td class="pn l">11076207336</td><td>180</td></tr><tr><td>3</td><td class="l">SUVINｸﾙ-C/D</td><td class="pn l">11025202106</td><td>133</td></tr><tr class="hl"><td>4</td><td class="l">ﾊﾞﾗﾝｻｰﾄﾞﾙﾏﾝ<span class="mk ss">26SS</span></td><td class="pn l">11036203201</td><td>126</td></tr><tr class="hl"><td>5</td><td class="l">ﾗｲﾄﾊﾟｳﾀﾞﾘｰ<span class="mk ss">26SS</span></td><td class="pn l">11076207101</td><td>120</td></tr><tr><td>6</td><td class="l">C/Nｸﾞﾛｸﾞﾗﾝ</td><td class="pn l">11086108039</td><td>120</td></tr><tr><td>7</td><td class="l">ﾓｽｽﾃｯﾁPO</td><td class="pn l">11026102010</td><td>114</td></tr><tr><td>8</td><td class="l">BLUEBERRY T</td><td class="pn l">11076107933</td><td>110</td></tr><tr><td>9</td><td class="l">ﾌﾗﾜｰｺｰﾄﾞﾚｰｽ</td><td class="pn l">11016101042</td><td>104</td></tr><tr class="hl"><td>10</td><td class="l">ﾁｪﾛｷｰPT<span class="mk ss">26SS</span><span class="mk thick">厚</span></td><td class="pn l">11056205236</td><td>104</td></tr></tbody></table></div></div><div class="brand"><h3 class="bh"><span class="sw" style="background:#5B8DB8"></span>MACPHEE</h3>
+<div class="bmetrics">
+<div class="bm"><div class="bm-l">TOP10集中度</div><div class="bm-cmp"><span class="bm-store">36.8%</span><span class="bm-avg">TOP10÷ブランド売上</span></div></div>
+<div class="bm"><div class="bm-l">ブランド売上（3〜5月）</div><div class="bm-cmp"><span class="bm-store">3,003</span><span class="bm-avg">千円</span></div></div>
+<div class="bm"><div class="bm-l">TOP10のうち26SS発注品</div><div class="bm-cmp"><span class="bm-store">4</span><span class="bm-avg">/10品番</span></div></div>
+<div class="bm"><div class="bm-l">厚／後 マーク</div><div class="bm-cmp"><span class="bm-store">0／0</span><span class="bm-avg">品番</span></div></div>
+</div>
+<div class="tw"><table class="mini"><thead><tr><th>#</th><th class="l">商品名</th><th class="l">品番</th><th>売上</th></tr></thead><tbody><tr><td>1</td><td class="l">COTTON SERG</td><td class="pn l">12045204203</td><td>247</td></tr><tr><td>2</td><td class="l">ﾃﾞﾆﾑﾜｲﾄﾞ</td><td class="pn l">12041004001</td><td>190</td></tr><tr class="hl"><td>3</td><td class="l">CR STRETCH<span class="mk ss">26SS</span></td><td class="pn l">12046204202</td><td>119</td></tr><tr><td>4</td><td class="l">GIZA C/D</td><td class="pn l">12025402008</td><td>92</td></tr><tr class="hl"><td>5</td><td class="l">SILKBLEN BL<span class="mk ss">26SS</span></td><td class="pn l">12016201205</td><td>90</td></tr><tr class="hl"><td>6</td><td class="l">NYLON WASHE<span class="mk ss">26SS</span></td><td class="pn l">12076207302</td><td>78</td></tr><tr class="hl"><td>7</td><td class="l">200/2ﾊｰﾌｽﾘｰ<span class="mk ss">26SS</span></td><td class="pn l">12016201403</td><td>72</td></tr><tr><td>8</td><td class="l">CO/NY CABLE</td><td class="pn l">12025102701</td><td>72</td></tr><tr><td>9</td><td class="l">ﾅﾁｭﾗﾙｽﾗﾌﾞ S</td><td class="pn l">12045204402</td><td>72</td></tr><tr><td>10</td><td class="l">CRISPY TAFF</td><td class="pn l">12055205201</td><td>72</td></tr></tbody></table></div></div><div class="brand"><h3 class="bh"><span class="sw" style="background:#8BAFD4"></span>collection</h3>
+<div class="bmetrics">
+<div class="bm"><div class="bm-l">TOP10集中度</div><div class="bm-cmp"><span class="bm-store">54.2%</span><span class="bm-avg">TOP10÷ブランド売上</span></div></div>
+<div class="bm"><div class="bm-l">ブランド売上（3〜5月）</div><div class="bm-cmp"><span class="bm-store">1,601</span><span class="bm-avg">千円</span></div></div>
+<div class="bm"><div class="bm-l">TOP10のうち26SS発注品</div><div class="bm-cmp"><span class="bm-store">2</span><span class="bm-avg">/10品番</span></div></div>
+<div class="bm"><div class="bm-l">厚／後 マーク</div><div class="bm-cmp"><span class="bm-store">0／0</span><span class="bm-avg">品番</span></div></div>
+</div>
+<div class="tw"><table class="mini"><thead><tr><th>#</th><th class="l">商品名</th><th class="l">品番</th><th>売上</th></tr></thead><tbody><tr><td>1</td><td class="l">ｶﾊﾞｰﾄｸﾛｽ</td><td class="pn l">13083108001</td><td>315</td></tr><tr><td>2</td><td class="l">SPｼﾝｸﾞﾙﾉｯﾁ</td><td class="pn l">13074107352</td><td>90</td></tr><tr><td>3</td><td class="l">ﾄﾞﾗｲﾂｲﾙ</td><td class="pn l">13044204104</td><td>72</td></tr><tr><td>4</td><td class="l">ﾌﾗｯﾄﾃｰﾌﾟ</td><td class="pn l">13076107002</td><td>72</td></tr><tr><td>5</td><td class="l">ｽﾄﾚｯﾁﾌﾞﾛｰﾄﾞ</td><td class="pn l">13015201201</td><td>66</td></tr><tr class="hl"><td>6</td><td class="l">ﾌｨｸﾞﾘｰﾌEMB<span class="mk ss">26SS</span></td><td class="pn l">13076207302</td><td>60</td></tr><tr><td>7</td><td class="l">ﾌﾗﾜｰJQ</td><td class="pn l">13056105001</td><td>50</td></tr><tr><td>8</td><td class="l">ﾘｰﾌｴﾝﾌﾞﾛｲﾀﾞ</td><td class="pn l">13016101006</td><td>48</td></tr><tr><td>9</td><td class="l">ﾗﾒﾂｲｰﾄﾞ</td><td class="pn l">13076107001</td><td>48</td></tr><tr class="hl"><td>10</td><td class="l">ｽﾄﾚｯﾁﾌﾞﾛｰﾄﾞ<span class="mk ss">26SS</span></td><td class="pn l">13016201304</td><td>46</td></tr></tbody></table></div></div><div class="brand"><h3 class="bh"><span class="sw" style="background:#B5CDE4"></span>collection14</h3>
+<div class="bmetrics">
+<div class="bm"><div class="bm-l">TOP10集中度</div><div class="bm-cmp"><span class="bm-store">64.5%</span><span class="bm-avg">TOP10÷ブランド売上</span></div></div>
+<div class="bm"><div class="bm-l">ブランド売上（3〜5月）</div><div class="bm-cmp"><span class="bm-store">938</span><span class="bm-avg">千円</span></div></div>
+<div class="bm"><div class="bm-l">TOP10のうち26SS発注品</div><div class="bm-cmp"><span class="bm-store">7</span><span class="bm-avg">/10品番</span></div></div>
+<div class="bm"><div class="bm-l">厚／後 マーク</div><div class="bm-cmp"><span class="bm-store">0／0</span><span class="bm-avg">品番</span></div></div>
+</div>
+<div class="tw"><table class="mini"><thead><tr><th>#</th><th class="l">商品名</th><th class="l">品番</th><th>売上</th></tr></thead><tbody><tr class="hl"><td>1</td><td class="l">ｽﾗﾌﾞﾃﾝｼﾞｸ<span class="mk ss">26SS</span></td><td class="pn l">14016201209</td><td>100</td></tr><tr><td>2</td><td class="l">GOAT SUADE</td><td class="pn l">14076107102</td><td>80</td></tr><tr class="hl"><td>3</td><td class="l">ﾙｺｯﾄﾝｵｰｶﾞﾝｼ<span class="mk ss">26SS</span></td><td class="pn l">14076207352</td><td>69</td></tr><tr class="hl"><td>4</td><td class="l">WBｺﾝﾋﾞ<span class="mk ss">26SS</span></td><td class="pn l">14016201205</td><td>60</td></tr><tr class="hl"><td>5</td><td class="l">ｼﾙｸﾃﾞﾆﾑ<span class="mk ss">26SS</span></td><td class="pn l">14056205201</td><td>60</td></tr><tr><td>6</td><td class="l">ﾊﾟﾝｿｯﾃｨ</td><td class="pn l">14076107003</td><td>60</td></tr><tr class="hl"><td>7</td><td class="l">ﾙｺｯﾄﾝｵｰｶﾞﾝｼ<span class="mk ss">26SS</span></td><td class="pn l">14056205352</td><td>52</td></tr><tr class="hl"><td>8</td><td class="l">ｽﾗﾌﾞﾃﾝｼﾞｸ<span class="mk ss">26SS</span></td><td class="pn l">14016201208</td><td>48</td></tr><tr><td>9</td><td class="l">ｻﾝﾃｨｰﾕﾌｧﾝｼｰ</td><td class="pn l">14076207401</td><td>40</td></tr><tr class="hl"><td>10</td><td class="l">ｱｲﾚｯﾄｳｪｰﾌﾞ<span class="mk ss">26SS</span></td><td class="pn l">14046204302</td><td>36</td></tr></tbody></table></div></div><div class="brand"><h3 class="bh"><span class="sw" style="background:#7BAE7F"></span>SOULEIADO wear</h3>
+<div class="bmetrics">
+<div class="bm"><div class="bm-l">TOP10集中度</div><div class="bm-cmp"><span class="bm-store">100.0%</span><span class="bm-avg">TOP10÷ブランド売上</span></div></div>
+<div class="bm"><div class="bm-l">ブランド売上（3〜5月）</div><div class="bm-cmp"><span class="bm-store">220</span><span class="bm-avg">千円</span></div></div>
+<div class="bm"><div class="bm-l">TOP10のうち26SS発注品</div><div class="bm-cmp"><span class="bm-store">2</span><span class="bm-avg">/9品番</span></div></div>
+<div class="bm"><div class="bm-l">厚／後 マーク</div><div class="bm-cmp"><span class="bm-store">0／0</span><span class="bm-avg">品番</span></div></div>
+</div>
+<div class="tw"><table class="mini"><thead><tr><th>#</th><th class="l">商品名</th><th class="l">品番</th><th>売上</th></tr></thead><tbody><tr><td>1</td><td class="l">ERABLE</td><td class="pn l">75075207606</td><td>33</td></tr><tr><td>2</td><td class="l">ﾗﾒJQｽﾀﾝﾄﾞﾌﾘ</td><td class="pn l">75016101101</td><td>26</td></tr><tr><td>3</td><td class="l">ﾗﾒJQﾊﾞﾝﾄﾞｶﾗ</td><td class="pn l">75016101102</td><td>26</td></tr><tr><td>4</td><td class="l">ROBIN Aﾗｲﾝ</td><td class="pn l">75016101104</td><td>26</td></tr><tr><td>5</td><td class="l">ROBINｷﾞｬｻﾞｰ</td><td class="pn l">75016101103</td><td>23</td></tr><tr><td>6</td><td class="l">HERON/SCARA</td><td class="pn l">75016201504</td><td>23</td></tr><tr><td>7</td><td class="l">PARADISｷﾞｬｻ</td><td class="pn l">75015201603</td><td>21</td></tr><tr class="hl"><td>8</td><td class="l">REINE DARLE<span class="mk ss">26SS</span></td><td class="pn l">75016201207</td><td>21</td></tr><tr class="hl"><td>9</td><td class="l">REINE DARLE<span class="mk ss">26SS</span></td><td class="pn l">75016201208</td><td>21</td></tr></tbody></table></div></div><div class="brand"><h3 class="bh"><span class="sw" style="background:#C9B86A"></span>SOULEIADO goods</h3>
+<div class="bmetrics">
+<div class="bm"><div class="bm-l">TOP10集中度</div><div class="bm-cmp"><span class="bm-store">100.0%</span><span class="bm-avg">TOP10÷ブランド売上</span></div></div>
+<div class="bm"><div class="bm-l">ブランド売上（3〜5月）</div><div class="bm-cmp"><span class="bm-store">265</span><span class="bm-avg">千円</span></div></div>
+<div class="bm"><div class="bm-l">TOP10のうち26SS発注品</div><div class="bm-cmp"><span class="bm-store">2</span><span class="bm-avg">/9品番</span></div></div>
+<div class="bm"><div class="bm-l">厚／後 マーク</div><div class="bm-cmp"><span class="bm-store">0／0</span><span class="bm-avg">品番</span></div></div>
+</div>
+<div class="tw"><table class="mini"><thead><tr><th>#</th><th class="l">商品名</th><th class="l">品番</th><th>売上</th></tr></thead><tbody><tr><td>1</td><td class="l">ﾘﾊﾞｰｼﾊﾞﾙﾄｰﾄ</td><td class="pn l">76036203901</td><td>225</td></tr><tr><td>2</td><td class="l">LOSANGE</td><td class="pn l">76024202502</td><td>14</td></tr><tr class="hl"><td>3</td><td class="l">ROUND<span class="mk ss">26SS</span></td><td class="pn l">76106210305</td><td>6</td></tr><tr><td>4</td><td class="l">TOTEBUG</td><td class="pn l">76105210601</td><td>5</td></tr><tr><td>5</td><td class="l">ﾎﾟｰﾁ M</td><td class="pn l">76105410102</td><td>4</td></tr><tr><td>6</td><td class="l">POUCH S</td><td class="pn l">76105210603</td><td>3</td></tr><tr><td>7</td><td class="l">ﾎﾟｰﾁROUND</td><td class="pn l">76105410105</td><td>3</td></tr><tr class="hl"><td>8</td><td class="l">POUCHS<span class="mk ss">26SS</span></td><td class="pn l">76106210303</td><td>3</td></tr><tr><td>9</td><td class="l">TOUCAN</td><td class="pn l">76075207602</td><td>2</td></tr></tbody></table></div></div>
+</section>
+
+<section>
+  <h2>③ Q1に厚くすべき品（即売れる品）</h2>
+  <p class="note">消化スピード上位。最終消化100%超（緑）は発注不足＝27SSでの増額候補。</p>
+  <div class="tw"><table><thead><tr><th>ブランド</th><th class="l">商品</th><th>発注</th><th>最終消化</th><th>納品</th></tr></thead><tbody><tr><td>Ballsey</td><td class="l">ﾀｲﾙﾓﾁｰﾌEMB</td><td>180</td><td class="pos">150%</td><td>5月</td></tr><tr><td>Ballsey</td><td class="l">ﾌﾟﾛｾｽﾄﾞｺｯﾄﾝ</td><td>108</td><td class="pos">133%</td><td>4月</td></tr><tr><td>Ballsey</td><td class="l">ﾘﾖｾﾙﾂｲﾙ</td><td>128</td><td class="">75%</td><td>5月</td></tr><tr><td>Ballsey</td><td class="l">ﾗｲﾄﾊﾟｳﾀﾞﾘｰ</td><td>120</td><td class="pos">100%</td><td>2月</td></tr><tr><td>Ballsey</td><td class="l">ﾁｪﾛｷｰPT</td><td>104</td><td class="pos">100%</td><td>3月</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>④ 見切ってはいけない品（後で効く品）</h2>
+  <p class="note">Q1で出遅れたが最終で伸びた品。早期処分せず通期で持つ。</p>
+  <div class="tw"><table><thead><tr><th>ブランド</th><th class="l">商品</th><th>発注</th><th>Q1期</th><th>最終</th><th>納品</th></tr></thead><tbody><tr><td colspan="6" style="color:var(--sub);text-align:center">該当なし</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>⑤ 発注品番 ワースト10（ながの東急・Q1消化不振）</h2>
+  <p class="note">26SS発注品でQ1期消化が低い品番。<span class="mk cross">横</span>＝全社では売れているのに自店で動いていない品（品の問題ではなく売り方を見直す）。単位：千円。</p>
+  <div class="tw"><table><thead><tr><th>#</th><th>ブランド</th><th class="l">商品名</th><th>発注</th><th>Q1売上</th><th>消化率</th></tr></thead><tbody><tr><td>1</td><td>collection</td><td class="l">ｽﾄﾚｯﾁﾌﾞﾛｰﾄﾞ</td><td>184</td><td>46</td><td class="neg">25%</td></tr><tr><td>2</td><td>MACPHEE</td><td class="l">CR STRETCH</td><td>153</td><td>119</td><td class="neg">78%</td></tr><tr><td>3</td><td>Ballsey</td><td class="l">ﾀｲﾙﾓﾁｰﾌEMB</td><td>180</td><td>180</td><td class="neg">100%</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>⑥ 横展開候補（他店で売れている品）</h2>
+  <p class="note">全社で売れているのに、ながの東急では動いていない品。金額＝全社売上（千円）。27SSの発注・打ち出しで試す候補。</p>
+  <div class="tw"><table><thead><tr><th>#</th><th>ブランド</th><th class="l">商品名</th><th class="l">品番</th><th>全社売上</th></tr></thead><tbody><tr><td>1</td><td>Ballsey</td><td class="l">ＡＰＲ．フラワーＰＴサイドギャザーシ</td><td class="pn l">11016201233</td><td>9,876</td></tr><tr><td>2</td><td>Ballsey</td><td class="l">ＡＰＲ．フラワーＰＴスキッパーカラー</td><td class="pn l">11066206233</td><td>6,593</td></tr><tr><td>3</td><td>MACPHEE</td><td class="l">ＬＡＣＹ ＬＡＭＥレースチュニック</td><td class="pn l">12026202401</td><td>2,052</td></tr><tr><td>4</td><td>MACPHEE</td><td class="l">ＳＴＲＥＴＣＨ ＴＯＲＯショートジャ</td><td class="pn l">12076207233</td><td>1,280</td></tr><tr><td>5</td><td>MACPHEE</td><td class="l">ＬＡＣＹ ＬＡＭＥレースタンクトップ</td><td class="pn l">12026202402</td><td>1,262</td></tr></tbody></table></div>
+</section>
+
+<footer>本レポートは26SS実績（26SS展示会発注明細・店×品番 3〜8月売上・在庫）に基づく分析です。FC平均：Q1期消化率50.4%／最終63.8%／在庫倍率1.69／追随率48.2%。追随率＝各ブランドの自店売上TOP15のうち全店TOP15と一致する品番数÷母数（6ブランド合計、3〜5月）。高い＝全社軸で発注すれば外しにくい追随型、低い＝地域・客層に合った独自選定が効く独自型で、店の優劣ではない。｜ TOMORROWLAND フランチャイズ部 ・ 27SS展示会 ・ 単位：千円</footer>
+</div>
+
+
+</body></html>
