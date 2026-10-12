@@ -124,6 +124,19 @@
   a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
   @media(max-width:760px){.cards,.dash-grid,.bmetrics{grid-template-columns:repeat(2,1fr)}.twocol,.donut-row,.quad2{grid-template-columns:1fr}}
   @media print{body{background:#fff}.wrap{max-width:none}}
+
+  .segbar{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--barbg)}
+  .segbar span{display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden}
+  .segrow{display:grid;grid-template-columns:88px 1fr 64px;gap:10px;align-items:center;margin:6px 0;font-size:12px}
+  .segrow .lab{font-weight:700}
+  .segrow .amt{font-size:11px;color:var(--sub);text-align:right;font-variant-numeric:tabular-nums}
+  .segrow.ref .lab{color:var(--sub);font-weight:600}
+  .seglegend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--sub);margin:4px 0 10px}
+  .seglegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+  table.sc td,table.sc th{padding:7px 8px;font-size:12px}
+  .shc{font-weight:700}
+  .db-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+  .db-wrap svg{width:100%;height:auto;display:block}
 </style></head><body>
 <div class="wrap">
 <a class="backlink torso" href="torso_share.html#nagano">→ 26SSトルソー計画 振り返り（全店共有）</a>
@@ -213,6 +226,23 @@
   <h2>⑥ 横展開候補（他店で売れている品）</h2>
   <p class="note">全社で売れているのに、ながの東急では動いていない品。金額＝全社売上（千円）。27SSの発注・打ち出しで試す候補。</p>
   <div class="tw"><table><thead><tr><th>#</th><th>ブランド</th><th class="l">商品名</th><th class="l">品番</th><th>全社売上</th></tr></thead><tbody><tr><td>1</td><td>Ballsey</td><td class="l">ＡＰＲ．フラワーＰＴサイドギャザーシ</td><td class="pn l">11016201233</td><td>9,876</td></tr><tr><td>2</td><td>Ballsey</td><td class="l">ＡＰＲ．フラワーＰＴスキッパーカラー</td><td class="pn l">11066206233</td><td>6,593</td></tr><tr><td>3</td><td>MACPHEE</td><td class="l">ＬＡＣＹ ＬＡＭＥレースチュニック</td><td class="pn l">12026202401</td><td>2,052</td></tr><tr><td>4</td><td>MACPHEE</td><td class="l">ＳＴＲＥＴＣＨ ＴＯＲＯショートジャ</td><td class="pn l">12076207233</td><td>1,280</td></tr><tr><td>5</td><td>MACPHEE</td><td class="l">ＬＡＣＹ ＬＡＭＥレースタンクトップ</td><td class="pn l">12026202402</td><td>1,262</td></tr></tbody></table></div>
+</section>
+
+
+<section id="season-share">
+  <h2>⑦ 売上のシーズンコード構成（3〜5月・展示会8ブランド）</h2>
+  <p class="note">3〜5月のながの東急の店頭売上を、品番5〜6桁目のシーズンコードで「26SS本体」「26PS繰越」「25年繰越」「24年以前繰越」に分けた構成比。26SS本体＝コード62（GALERIE VIE・DES PRESは61）。出典：全店舗売上明細（2026年3〜8月）。※シーズンコードで分けているため、サマリKPIのQ1売上（発注品番の売上）とは一致しない。</p>
+  <div class="cards c3">
+    <div class="kpi"><div class="lbl">3月の26SS本体シェア</div><div class="val">25.8<span class="unit">%</span></div><div class="cmp"><span class="down">FC15店計42.3%比 -16.5pt</span>／15店中11位</div></div>
+    <div class="kpi"><div class="lbl">5月の26SS本体シェア</div><div class="val">74.2<span class="unit">%</span></div><div class="cmp"><span class="up">FC15店計72.6%比 +1.7pt</span></div></div>
+    <div class="kpi"><div class="lbl">3月の切り替えタイプ</div><div class="val txt"><span class="tag w" style="font-size:14px">ゆるやか</span></div><div class="cmp" style="color:var(--sub)">早い45%以上／ゆるやか30%未満</div></div>
+  </div>
+  <div style="margin-top:14px"><div class="seglegend"><span><i style="background:#1f3a5f"></i>26SS本体</span><span><i style="background:#c8922a"></i>26PS繰越</span><span><i style="background:#8a9bb0"></i>25年繰越</span><span><i style="background:#5c4a32"></i>24年以前繰越</span><span><i style="background:#cfd5dd"></i>区分不明</span><span>右端＝8ブランド売上（千円）</span></div>
+  <div class="segrow"><div class="lab">3月</div><div class="segbar"><span style="width:25.81%;background:#1f3a5f" title="26SS本体 25.8%（1,066千円）">26%</span><span style="width:33.75%;background:#c8922a" title="26PS繰越 33.8%（1,394千円）">34%</span><span style="width:17.80%;background:#8a9bb0" title="25年繰越 17.8%（735千円）">18%</span><span style="width:20.15%;background:#5c4a32" title="24年以前繰越 20.1%（832千円）">20%</span><span style="width:2.49%;background:#cfd5dd" title="区分不明 2.5%（103千円）"></span></div><div class="amt">4,130</div></div><div class="segrow"><div class="lab">4月</div><div class="segbar"><span style="width:59.03%;background:#1f3a5f" title="26SS本体 59.0%（1,526千円）">59%</span><span style="width:7.54%;background:#c8922a" title="26PS繰越 7.5%（195千円）">8%</span><span style="width:17.79%;background:#8a9bb0" title="25年繰越 17.8%（460千円）">18%</span><span style="width:13.42%;background:#5c4a32" title="24年以前繰越 13.4%（347千円）">13%</span><span style="width:2.21%;background:#cfd5dd" title="区分不明 2.2%（57千円）"></span></div><div class="amt">2,585</div></div><div class="segrow"><div class="lab">5月</div><div class="segbar"><span style="width:74.22%;background:#1f3a5f" title="26SS本体 74.2%（2,910千円）">74%</span><span style="width:1.73%;background:#c8922a" title="26PS繰越 1.7%（68千円）"></span><span style="width:13.62%;background:#8a9bb0" title="25年繰越 13.6%（534千円）">14%</span><span style="width:8.49%;background:#5c4a32" title="24年以前繰越 8.5%（333千円）">8%</span><span style="width:1.94%;background:#cfd5dd" title="区分不明 1.9%（76千円）"></span></div><div class="amt">3,921</div></div>
+  <div class="segrow"><div class="lab">Q1計</div><div class="segbar"><span style="width:51.73%;background:#1f3a5f" title="26SS本体 51.7%（5,502千円）">52%</span><span style="width:15.58%;background:#c8922a" title="26PS繰越 15.6%（1,657千円）">16%</span><span style="width:16.26%;background:#8a9bb0" title="25年繰越 16.3%（1,729千円）">16%</span><span style="width:14.22%;background:#5c4a32" title="24年以前繰越 14.2%（1,512千円）">14%</span><span style="width:2.22%;background:#cfd5dd" title="区分不明 2.2%（236千円）"></span></div><div class="amt">10,636</div></div>
+  <div class="segrow ref"><div class="lab">FC15店計Q1</div><div class="segbar"><span style="width:58.30%;background:#1f3a5f" title="26SS本体 58.3%（142,805千円）">58%</span><span style="width:13.11%;background:#c8922a" title="26PS繰越 13.1%（32,120千円）">13%</span><span style="width:12.67%;background:#8a9bb0" title="25年繰越 12.7%（31,027千円）">13%</span><span style="width:14.22%;background:#5c4a32" title="24年以前繰越 14.2%（34,823千円）">14%</span><span style="width:1.70%;background:#cfd5dd" title="区分不明 1.7%（4,159千円）"></span></div><div class="amt">244,934</div></div></div>
+  <div style="margin-top:12px"><div class="tw"><table class="sc"><thead><tr><th class="l">区分</th><th>3月</th><th>構成比</th><th>4月</th><th>構成比</th><th>5月</th><th>構成比</th><th>Q1計</th><th>構成比</th></tr></thead><tbody><tr class=hl><td>26SS本体</td><td>1,066</td><td>25.8%</td><td>1,526</td><td>59.0%</td><td>2,910</td><td>74.2%</td><td>5,502</td><td>51.7%</td></tr><tr><td>26PS繰越</td><td>1,394</td><td>33.8%</td><td>195</td><td>7.5%</td><td>68</td><td>1.7%</td><td>1,657</td><td>15.6%</td></tr><tr><td>25年繰越</td><td>735</td><td>17.8%</td><td>460</td><td>17.8%</td><td>534</td><td>13.6%</td><td>1,729</td><td>16.3%</td></tr><tr><td>24年以前繰越</td><td>832</td><td>20.1%</td><td>347</td><td>13.4%</td><td>333</td><td>8.5%</td><td>1,512</td><td>14.2%</td></tr><tr><td>区分不明</td><td>103</td><td>2.5%</td><td>57</td><td>2.2%</td><td>76</td><td>1.9%</td><td>236</td><td>2.2%</td></tr><tr class="total"><td>計</td><td>4,130</td><td>100%</td><td>2,585</td><td>100%</td><td>3,921</td><td>100%</td><td>10,636</td><td>100%</td></tr></tbody></table></div></div>
+  <div class="insight" style="border-left-color:#2D5A8E"><span class="tag n">傾向（仮説）</span> 3月の26SS本体シェアは25.8%（FC15店中11位）で、切り替えはゆるやか。3月の売上の38%を25年以前の繰越品、34%を26PS繰越が占める。それでもQ1期消化率は50.5%と高く、独自の品でお客様を掴んでいる課題グループCの特性と合っている。<br><span class="tag w" style="margin-top:4px">確かめる問い</span> 新作の立ち上がりを早めると、Q1の売上をさらに積めるか。繰越品の売れ方は、固定のお客様がついている強みか。<br><span style="font-size:11px;color:var(--sub)">26SS品が店に届いた時期（発送月）でも3月のシェアは上下する。課題グループとの関係はサマリーダッシュボード参照。</span></div>
 </section>
 
 <footer>本レポートは26SS実績（26SS展示会発注明細・店×品番 3〜8月売上・在庫）に基づく分析です。FC平均：Q1期消化率50.4%／最終63.8%／在庫倍率1.69／追随率48.2%。追随率＝各ブランドの自店売上TOP15のうち全店TOP15と一致する品番数÷母数（6ブランド合計、3〜5月）。高い＝全社軸で発注すれば外しにくい追随型、低い＝地域・客層に合った独自選定が効く独自型で、店の優劣ではない。｜ TOMORROWLAND フランチャイズ部 ・ 27SS展示会 ・ 単位：千円</footer>

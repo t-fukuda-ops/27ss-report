@@ -124,6 +124,19 @@
   a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
   @media(max-width:760px){.cards,.dash-grid,.bmetrics{grid-template-columns:repeat(2,1fr)}.twocol,.donut-row,.quad2{grid-template-columns:1fr}}
   @media print{body{background:#fff}.wrap{max-width:none}}
+
+  .segbar{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--barbg)}
+  .segbar span{display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden}
+  .segrow{display:grid;grid-template-columns:88px 1fr 64px;gap:10px;align-items:center;margin:6px 0;font-size:12px}
+  .segrow .lab{font-weight:700}
+  .segrow .amt{font-size:11px;color:var(--sub);text-align:right;font-variant-numeric:tabular-nums}
+  .segrow.ref .lab{color:var(--sub);font-weight:600}
+  .seglegend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--sub);margin:4px 0 10px}
+  .seglegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+  table.sc td,table.sc th{padding:7px 8px;font-size:12px}
+  .shc{font-weight:700}
+  .db-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+  .db-wrap svg{width:100%;height:auto;display:block}
 </style></head><body>
 <div class="wrap">
 <a class="backlink torso" href="torso_share.html#kagoshima_gv">→ 26SSトルソー計画 振り返り（全店共有）</a>
@@ -189,6 +202,23 @@
   <h2>⑥ 横展開候補（他店で売れている品）</h2>
   <p class="note">全社で売れているのに、鹿児島GVでは動いていない品。金額＝全社売上（千円）。27SSの発注・打ち出しで試す候補。</p>
   <div class="tw"><table><thead><tr><th>#</th><th>ブランド</th><th class="l">商品名</th><th class="l">品番</th><th>全社売上</th></tr></thead><tbody><tr><td>1</td><td>GALERIE VIE</td><td class="l">ﾘﾈﾝﾎﾟﾌﾟﾘﾝ</td><td class="pn l">23076107222</td><td>2,640</td></tr><tr><td>2</td><td>GALERIE VIE</td><td class="l">ＡＲＡＮオープンカラーＰ／Ｏ</td><td class="pn l">23026102003</td><td>743</td></tr></tbody></table></div>
+</section>
+
+
+<section id="season-share">
+  <h2>⑦ 売上のシーズンコード構成（3〜5月・展示会8ブランド）</h2>
+  <p class="note">3〜5月の鹿児島GVの店頭売上を、品番5〜6桁目のシーズンコードで「26SS本体」「26PS繰越」「25年繰越」「24年以前繰越」に分けた構成比。26SS本体＝コード62（GALERIE VIE・DES PRESは61）。出典：全店舗売上明細（2026年3〜8月）。※シーズンコードで分けているため、サマリKPIのQ1売上（発注品番の売上）とは一致しない。</p>
+  <div class="cards c3">
+    <div class="kpi"><div class="lbl">3月の26SS本体シェア</div><div class="val">90.8<span class="unit">%</span></div><div class="cmp"><span class="up">FC15店計42.3%比 +48.6pt</span>／15店中1位</div></div>
+    <div class="kpi"><div class="lbl">5月の26SS本体シェア</div><div class="val">66.0<span class="unit">%</span></div><div class="cmp"><span class="down">FC15店計72.6%比 -6.6pt</span></div></div>
+    <div class="kpi"><div class="lbl">3月の切り替えタイプ</div><div class="val txt"><span class="tag g" style="font-size:14px">早い</span></div><div class="cmp" style="color:var(--sub)">早い45%以上／ゆるやか30%未満</div></div>
+  </div>
+  <div style="margin-top:14px"><div class="seglegend"><span><i style="background:#1f3a5f"></i>26SS本体</span><span><i style="background:#c8922a"></i>26PS繰越</span><span><i style="background:#8a9bb0"></i>25年繰越</span><span><i style="background:#5c4a32"></i>24年以前繰越</span><span><i style="background:#cfd5dd"></i>区分不明</span><span>右端＝8ブランド売上（千円）</span></div>
+  <div class="segrow"><div class="lab">3月</div><div class="segbar"><span style="width:90.84%;background:#1f3a5f" title="26SS本体 90.8%（2,389千円）">91%</span><span style="width:6.35%;background:#8a9bb0" title="25年繰越 6.3%（167千円）"></span><span style="width:2.81%;background:#5c4a32" title="24年以前繰越 2.8%（74千円）"></span></div><div class="amt">2,630</div></div><div class="segrow"><div class="lab">4月</div><div class="segbar"><span style="width:79.89%;background:#1f3a5f" title="26SS本体 79.9%（1,561千円）">80%</span><span style="width:8.03%;background:#8a9bb0" title="25年繰越 8.0%（157千円）">8%</span><span style="width:12.08%;background:#5c4a32" title="24年以前繰越 12.1%（236千円）">12%</span></div><div class="amt">1,954</div></div><div class="segrow"><div class="lab">5月</div><div class="segbar"><span style="width:65.99%;background:#1f3a5f" title="26SS本体 66.0%（2,646千円）">66%</span><span style="width:23.37%;background:#8a9bb0" title="25年繰越 23.4%（937千円）">23%</span><span style="width:10.65%;background:#5c4a32" title="24年以前繰越 10.6%（427千円）">11%</span></div><div class="amt">4,010</div></div>
+  <div class="segrow"><div class="lab">Q1計</div><div class="segbar"><span style="width:76.75%;background:#1f3a5f" title="26SS本体 76.8%（6,596千円）">77%</span><span style="width:14.67%;background:#8a9bb0" title="25年繰越 14.7%（1,261千円）">15%</span><span style="width:8.58%;background:#5c4a32" title="24年以前繰越 8.6%（737千円）">9%</span></div><div class="amt">8,594</div></div>
+  <div class="segrow ref"><div class="lab">FC15店計Q1</div><div class="segbar"><span style="width:58.30%;background:#1f3a5f" title="26SS本体 58.3%（142,805千円）">58%</span><span style="width:13.11%;background:#c8922a" title="26PS繰越 13.1%（32,120千円）">13%</span><span style="width:12.67%;background:#8a9bb0" title="25年繰越 12.7%（31,027千円）">13%</span><span style="width:14.22%;background:#5c4a32" title="24年以前繰越 14.2%（34,823千円）">14%</span><span style="width:1.70%;background:#cfd5dd" title="区分不明 1.7%（4,159千円）"></span></div><div class="amt">244,934</div></div></div>
+  <div style="margin-top:12px"><div class="tw"><table class="sc"><thead><tr><th class="l">区分</th><th>3月</th><th>構成比</th><th>4月</th><th>構成比</th><th>5月</th><th>構成比</th><th>Q1計</th><th>構成比</th></tr></thead><tbody><tr class=hl><td>26SS本体</td><td>2,389</td><td>90.8%</td><td>1,561</td><td>79.9%</td><td>2,646</td><td>66.0%</td><td>6,596</td><td>76.8%</td></tr><tr><td>26PS繰越</td><td>0</td><td>0.0%</td><td>0</td><td>0.0%</td><td>0</td><td>0.0%</td><td>0</td><td>0.0%</td></tr><tr><td>25年繰越</td><td>167</td><td>6.3%</td><td>157</td><td>8.0%</td><td>937</td><td>23.4%</td><td>1,261</td><td>14.7%</td></tr><tr><td>24年以前繰越</td><td>74</td><td>2.8%</td><td>236</td><td>12.1%</td><td>427</td><td>10.6%</td><td>737</td><td>8.6%</td></tr><tr><td>区分不明</td><td>0</td><td>0.0%</td><td>0</td><td>0.0%</td><td>0</td><td>0.0%</td><td>0</td><td>0.0%</td></tr><tr class="total"><td>計</td><td>2,630</td><td>100%</td><td>1,954</td><td>100%</td><td>4,010</td><td>100%</td><td>8,594</td><td>100%</td></tr></tbody></table></div></div>
+  <div class="insight" style="border-left-color:#1f8a5b"><span class="tag n">傾向（仮説）</span> GALERIE VIE単独の店で、26PS繰越がない構成。3月から26SS本体が9割を占め、FC15店で最も早く新作に切り替わっている。4〜5月は25年以前の繰越品の売上が増え、本体シェアは下がっていく。<br><span class="tag w" style="margin-top:4px">確かめる問い</span> 5月に繰越品の売上が増えるのは、追加投入の新作が足りていないためか、繰越品に固定の需要があるためか。<br><span style="font-size:11px;color:var(--sub)">26SS品が店に届いた時期（発送月）でも3月のシェアは上下する。課題グループとの関係はサマリーダッシュボード参照。</span></div>
 </section>
 
 <footer>本レポートは26SS実績（26SS展示会発注明細・店×品番 3〜8月売上・在庫）に基づく分析です。FC平均：Q1期消化率50.4%／最終63.8%／在庫倍率1.69／追随率48.2%。追随率＝各ブランドの自店売上TOP15のうち全店TOP15と一致する品番数÷母数（6ブランド合計、3〜5月）。高い＝全社軸で発注すれば外しにくい追随型、低い＝地域・客層に合った独自選定が効く独自型で、店の優劣ではない。｜ TOMORROWLAND フランチャイズ部 ・ 27SS展示会 ・ 単位：千円</footer>
